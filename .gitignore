@@ -1,0 +1,6 @@
+/maintenanceenv/*
+*.sqlite3
+migrations/
+__pycache__/
+settings.py
+maintenance/settings/database.py

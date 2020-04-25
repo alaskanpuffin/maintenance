@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Garden Pi</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/adminlte.min.css' %}"
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}"
+  </head>
+  <body class="hold-transition login-page">
+    <div class="wrapper">
+
+      {% block content %}{% endblock %}
+
+    </div>
+    <script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>
+    <script src="{% static 'js/adminlte.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </body>
+</html>
