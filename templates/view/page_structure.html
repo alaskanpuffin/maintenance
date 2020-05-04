@@ -1,11 +1,11 @@
-{% extends 'templates/page_structure.html' %}
+{% extends 'page_structure.html' %}
 
 {% block content %}
 <div class="content-header">
   <div class="container-fluid">
     <div class="row">
       <div class="col-6">
-        <h2>{% if object.0.manufacturer %}{{ object.0.manufacturer.name }}{% endif %} {{ object.0.name }}{% if object.0.tag %} - {{ object.0.tag }}{% endif %}</h2>
+        <h2>{% if object.0.manufacturer %}{{ object.0.manufacturer.name }}{% endif %} {{ object.0.value }}{% if object.0.tag %} - {{ object.0.tag }}{% endif %}</h2>
       </div>
     </div>
   </div>

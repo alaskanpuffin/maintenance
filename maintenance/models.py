@@ -31,7 +31,7 @@ class Model(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.manufacturer.name + " " + self.name
 
 class Asset(models.Model):
     name = models.CharField(max_length=100)

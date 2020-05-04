@@ -1,0 +1,17 @@
+<form role="form" id="form-{{ form.Meta.name }}" action="{{ form.Meta.baseUrl }}/add/" method="POST"></form>
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" form="form-{{ form.Meta.name }}">
+<div class="card-body">
+  <div class="row">
+    {% for field in form %}
+      <div class="col-6">
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.name|title }}</label>
+          {{ field }}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<div class="card-footer">
+  <button type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary">Submit</button>
+</div>

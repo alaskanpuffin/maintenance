@@ -1,20 +1,23 @@
-{% extends 'templates/view/page_structure.html' %}
-{% load verbose_names %}
+{% extends 'view/page_structure.html' %}
 
 {% block view %}
 <div class="card">
   <div class="card-header">
-    <h3 class="card-title">{{ tableObj.verbose_name }} Details</h3>
+    <h3 class="card-title">{{ tableObj.verbose_name|title }} Details</h3>
   </div>
   <div class="card-body">
     <div class="card-tools">
       <table class="table table-bordered">
         <tbody>
-          {% for key, value in object.values.0.items %}
-            {% if not key == 'id' %}
+          {% for field in object %}
+            {% if not field.name == 'id' %}
             <tr>
-              <th>{% get_verbose_field_name tableObj.model key %}</th>
-              <td>{{ value }}</td>
+              <th>{{ field.name|title }}</th>
+              <td>{% if field.link %}
+                  <a href="{{ field.link }}">{{ field.value }}</a>
+                {% else %}
+                  {{ field.value }}
+                {% endif %}</td>
             </tr>
             {% endif %}
           {% endfor %}
@@ -23,7 +26,11 @@
     </div>
   </div>
   <div class="card-footer">
-    <button type="submit" class="btn btn-danger float-right ml-2"><i class="fa fa-trash-alt"></i> Delete</button>
+    <form method="POST" action="../../delete/">
+      {% csrf_token %}
+      <input type="hidden" name="objects" value="{{ object.values.0.id }}">
+      <button type="submit" class="btn btn-danger float-right ml-2"><i class="fa fa-trash-alt"></i> Delete</button>
+    </form>
     <button type="submit" class="btn btn-success float-right"><i class="fa fa-edit"></i> Edit</button>
   </div>
 </div>

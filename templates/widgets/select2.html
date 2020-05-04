@@ -1,0 +1,51 @@
+<div class="input-group">
+<select class="form-control" name="{{ widget.name }}" {% include "widgets/attrs.html" %}>{% for group_name, group_choices, group_index in widget.optgroups %}{% if group_name %}
+  <optgroup label="{{ group_name }}">{% endif %}{% for option in group_choices %}
+  {% include option.template_name with widget=option %}{% endfor %}{% if group_name %}
+  </optgroup>{% endif %}{% endfor %}
+</select>
+<div class="input-group-append">
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-{{ widget.name }}"><i class="fa fa-plus"></i></button>
+</div>
+</div>
+<div class="modal fade" id="modal-{{ widget.name }}" tabindex="-1" role="dialog" aria-labelledby="Add New {{ widget.name|title }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title">Add New {{ widget.name|title }}</h5>
+          <button type="button" class="close" data-toggle="modal" data-target="#modal-{{ widget.name }}" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% include 'forms/form_generator.html' %}
+    </div>
+  </div
+</div>
+</div>
+<script>
+  $('input[name="csrfmiddlewaretoken"]').val(Cookies.get('csrftoken'));
+  $("#form-{{ form.Meta.name }}").submit(function(e){
+      e.preventDefault();
+      $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action') + '?format=json',
+            data: $(this).serialize(),
+            success: function (data) {
+                responseObj = $.parseJSON(data);
+                if (responseObj['valid'] == true) {
+                  var data = {
+                    id: responseObj['pk'],
+                    text: responseObj['name']
+                  };
+
+                  var newOption = new Option(data.text, data.id, false, false);
+                  $('select[name="{{ widget.name }}"]').append(newOption).trigger('change').val(responseObj['pk']);
+                  $('#modal-{{ widget.name }}').modal('hide');
+                }
+            },
+            error: function (data) {
+                responseObj = $.parseJSON(data);
+            },
+        });
+  });
+</script>

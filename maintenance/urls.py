@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views.main import Dashboard, Table, AddTable, ViewTable
+from django.contrib.auth import views as auth_views
+from .views.main import Dashboard, Table, TableForm, DeleteTable, ViewTable, Logout
 from django.conf.urls.static import static
 from django.conf import settings
 from .tables import *
@@ -25,28 +26,35 @@ urlpatterns = [
     path('', Dashboard.as_view()),
     path('assets/', include([
         path('', Table.as_view(tableObj=AssetTable), name='assets'),
-        path('add/', AddTable.as_view(formObj=AssetForm)),
+        path('add/', TableForm.as_view(formObj=AssetForm)),
+        path('delete/', DeleteTable.as_view(tableObj=AssetTable)),
         path('view/<int:id>/', ViewTable.as_view(tableObj=AssetTable)),
     ])),
     path('config/organizations/', include([
-        path('', Table.as_view(tableObj=OrganizationTable), name='organizations'),
-        path('add/', AddTable.as_view(formObj=OrganizationForm)),
+        path('', Table.as_view(tableObj=OrganizationTable), name='organization'),
+        path('add/', TableForm.as_view(formObj=OrganizationForm)),
+        path('delete/', DeleteTable.as_view(tableObj=OrganizationTable)),
         path('view/<int:id>/', ViewTable.as_view(tableObj=OrganizationTable)),
     ])),
     path('config/departments/', include([
-        path('', Table.as_view(tableObj=DepartmentTable), name='departments'),
-        path('add/', AddTable.as_view(formObj=DepartmentForm)),
+        path('', Table.as_view(tableObj=DepartmentTable), name='department'),
+        path('add/', TableForm.as_view(formObj=DepartmentForm)),
+        path('delete/', DeleteTable.as_view(tableObj=DepartmentTable)),
         path('view/<int:id>/', ViewTable.as_view(tableObj=DepartmentTable)),
     ])),
     path('config/manufacturers/', include([
-        path('', Table.as_view(tableObj=ManufacturerTable), name='manufacturers'),
-        path('add/', AddTable.as_view(formObj=ManufacturerForm)),
+        path('', Table.as_view(tableObj=ManufacturerTable), name='manufacturer'),
+        path('add/', TableForm.as_view(formObj=ManufacturerForm)),
+        path('delete/', DeleteTable.as_view(tableObj=ManufacturerTable)),
         path('view/<int:id>/', ViewTable.as_view(tableObj=ManufacturerTable)),
     ])),
     path('config/models/', include([
-        path('', Table.as_view(tableObj=ModelTable), name='models'),
-        path('add/', AddTable.as_view(formObj=ModelsForm)),
+        path('', Table.as_view(tableObj=ModelTable), name='model'),
+        path('add/', TableForm.as_view(formObj=ModelsForm)),
+        path('delete/', DeleteTable.as_view(tableObj=ModelTable)),
         path('view/<int:id>/', ViewTable.as_view(tableObj=ModelTable)),
     ])),
+    path('login/', auth_views.LoginView.as_view()),
+    path('logout/', Logout.as_view()),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
