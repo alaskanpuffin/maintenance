@@ -34,11 +34,12 @@ tablepatterns = ([
 urlpatterns = [
     path('', Dashboard.as_view()),
     path('assets/', include(tablepatterns, namespace='asset'), {'tableObj': AssetTable}),
-    path('config/organizations/', include(tablepatterns, namespace='organization'), {'tableObj': OrganizationTable}),
+    path('config/sites/', include(tablepatterns, namespace='site'), {'tableObj': SiteTable}),
     path('config/departments/', include(tablepatterns, namespace='department'), {'tableObj': DepartmentTable}),
     path('config/manufacturers/', include(tablepatterns, namespace='manufacturer'), {'tableObj': ManufacturerTable}),
     path('config/models/', include(tablepatterns, namespace='model'), {'tableObj': ModelTable}),
     path('config/users/', include(tablepatterns, namespace='user'), {'tableObj': UserTable}),
+    path('config/suppliers/', include(tablepatterns, namespace='supplier'), {'tableObj': SupplierTable}),
     path('login/', auth_views.LoginView.as_view()),
     path('logout/', Logout.as_view()),
     path('admin/', admin.site.urls),

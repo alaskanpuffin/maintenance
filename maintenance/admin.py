@@ -3,8 +3,8 @@ from django.contrib.auth.admin import UserAdmin
 from .models import *
 from django.contrib import admin
 
-@admin.register(Organization)
-class OrganizationAdmin(admin.ModelAdmin):
+@admin.register(Site)
+class SiteAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Department)

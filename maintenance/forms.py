@@ -22,11 +22,11 @@ class BootstrapFormMixin(forms.Form):
             self.fields[f].widget.attrs.update({'class': self.fields[f].widget.attrs.get('class', '') + ' is-invalid'})
         return ret
 
-class OrganizationForm(ModelForm, BootstrapFormMixin):
+class SiteForm(ModelForm, BootstrapFormMixin):
     class Meta:
-        baseUrl = '/config/organizations'
-        model = Organization
-        name = "Organization"
+        baseUrl = '/config/sites'
+        model = Site
+        name = "Site"
         fields = '__all__'
 
 class DepartmentForm(ModelForm, BootstrapFormMixin):
@@ -59,18 +59,28 @@ class UserForm(ModelForm, BootstrapFormMixin):
         name = "User"
         fields = '__all__'
 
+class SupplierForm(ModelForm, BootstrapFormMixin):
+    class Meta:
+        baseUrl = '/config/supplier'
+        model = Supplier
+        name = "Supplier"
+        fields = '__all__'
+
 class AssetForm(ModelForm, BootstrapFormMixin):
-    organization = forms.ModelChoiceField(queryset=Organization.objects.all(), widget=Select2(form=OrganizationForm))
-    department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm))
+    site = forms.ModelChoiceField(queryset=Site.objects.all(), widget=Select2(form=SiteForm))
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm), required=False)
     model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
     user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm), required=False)
+    supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
 
     def __init__(self,*args,**kwargs):
         super (AssetForm,self ).__init__(*args,**kwargs)
 
         self.fields['purchaseDate'].widget.attrs['class'] = 'form-control datepicker'
+        self.fields['warrantyExpiration'].widget.attrs['class'] = 'form-control datepicker'
 
     class Meta:
+        customTemplate = 'forms/asset.html'
         baseUrl = '/assets'
         model = Asset
         name = "Asset"

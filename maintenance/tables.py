@@ -17,12 +17,12 @@ class DepartmentTable():
     verbose_plural_name = "Departments"
     url = 'department'
 
-class OrganizationTable():
-    model = Organization
-    form = OrganizationForm
-    verbose_name = "Organization"
-    verbose_plural_name = "Organizations"
-    url = 'organization'
+class SiteTable():
+    model = Site
+    form = SiteForm
+    verbose_name = "Site"
+    verbose_plural_name = "Sites"
+    url = 'site'
 
 class ManufacturerTable():
     model = Manufacturer
@@ -47,3 +47,10 @@ class UserTable():
     verbose_plural_name = "Users"
     url = 'user'
     search_fields = ('firstName', 'lastName')
+
+class SupplierTable():
+    model = Supplier
+    form = SupplierForm
+    verbose_name = "Supplier"
+    verbose_plural_name = "Suppliers"
+    url = 'supplier'

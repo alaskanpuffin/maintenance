@@ -63,21 +63,28 @@ class Table(LoginRequiredMixin, TemplateView):
 class TableForm(LoginRequiredMixin, TemplateView):
     tableObj = None
     requestFormat = None
+    template = 'forms/generic.html'
 
     def get(self, request, *args, **kwargs):
         self.tableObj = kwargs.get('tableObj')
         form = self.tableObj.form
+
+        if hasattr(form.Meta, 'customTemplate'):
+            self.template = form.Meta.customTemplate
 
         if kwargs.get('id'):
             objectId = kwargs.get('id')
             querySet = self.tableObj.model.objects.get(pk=objectId)
             form = form(instance=querySet)
 
-        return render(request, 'forms/generic.html', {'form': form})
+        return render(request, self.template, {'form': form, 'tableObj': self.tableObj})
 
     def post(self, request, *args, **kwargs):
         self.tableObj = kwargs.get('tableObj')
         form = self.tableObj.form(request.POST)
+
+        if hasattr(form.Meta, 'customTemplate'):
+            self.template = form.Meta.customTemplate
 
         if kwargs.get('id'):
             objectId = kwargs.get('id')
@@ -106,7 +113,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
 
                 return HttpResponse(json.dumps(responseObj))
             else:
-                return render(request, 'forms/generic.html', {'form': form})
+                return render(request, self.template, {'form': form, 'tableObj': self.tableObj})
 
 class DeleteTable(LoginRequiredMixin, TemplateView):
     tableObj = None

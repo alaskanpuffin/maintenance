@@ -14,7 +14,9 @@
                 {% if field.link %}
                   <a href="{{ field.link }}">{{ field.value }}</a>
                 {% else %}
-                  {{ field.value }}
+                  {% if not field.value == None %}
+                    {{ field.value }}
+                  {% endif %}
                 {% endif %}
               </td>
             </tr>

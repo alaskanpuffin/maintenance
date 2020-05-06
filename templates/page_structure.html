@@ -5,8 +5,8 @@
 <head>
   <title>Maintenance</title>
   <link rel="stylesheet" type="text/css" href="{% static 'css/select2.min.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/adminlte.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/adminlte.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datepicker3.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   <link href="{% static 'fonts/fontawesome/css/all.css' %}" rel="stylesheet">
@@ -90,31 +90,43 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/config/organizations" class="nav-link {% if '/config/organizations/' in request.path %} active {% endif %}">
+                  {% url 'site:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Organizations</p>
+                    <p>Sites</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/config/departments" class="nav-link {% if '/config/departments/' in request.path %} active {% endif %}">
+                  {% url 'department:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Departments</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/config/manufacturers" class="nav-link {% if '/config/manufacturers/' in request.path %} active {% endif %}">
+                  {% url 'manufacturer:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Manufacturers</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/config/models" class="nav-link {% if '/config/models/' in request.path %} active {% endif %}">
+                  {% url 'supplier:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Suppliers</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  {% url 'model:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Models</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/config/users" class="nav-link {% if '/config/users/' in request.path %} active {% endif %}">
+                  {% url 'user:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Users</p>
                   </a>
