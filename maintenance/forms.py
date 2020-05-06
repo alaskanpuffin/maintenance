@@ -63,7 +63,7 @@ class AssetForm(ModelForm, BootstrapFormMixin):
     organization = forms.ModelChoiceField(queryset=Organization.objects.all(), widget=Select2(form=OrganizationForm))
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm))
     model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
-    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm))
+    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm), required=False)
 
     def __init__(self,*args,**kwargs):
         super (AssetForm,self ).__init__(*args,**kwargs)

@@ -136,7 +136,7 @@ class ViewTable(LoginRequiredMixin, TemplateView):
                 'name': field.verbose_name,
                 'value': data
             }
-            if field.get_internal_type() == 'ForeignKey':
+            if field.get_internal_type() == 'ForeignKey' and data:
                 objectDict['link'] = '%sview/%s/' % (reverse(field.name + ":main"), data.id)
 
             object.append(objectDict)

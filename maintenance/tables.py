@@ -33,7 +33,7 @@ class ManufacturerTable():
 
 class ModelTable():
     model = Model
-    form = ModelForm
+    form = ModelsForm
     fields = ('name', 'manufacturer__name')
     verbose_name = "Model"
     verbose_plural_name = "Models"
@@ -46,3 +46,4 @@ class UserTable():
     verbose_name = "User"
     verbose_plural_name = "Users"
     url = 'user'
+    search_fields = ('firstName', 'lastName')
