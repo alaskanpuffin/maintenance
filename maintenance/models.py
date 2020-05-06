@@ -1,6 +1,13 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+class DefaultMixin(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
 class CustomUser(AbstractUser):
     pass
     # add additional fields in here
@@ -8,22 +15,22 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-class Organization(models.Model):
+class Organization(DefaultMixin):
     name = models.CharField(max_length=100)
     def __str__(self):
         return self.name
 
-class Department(models.Model):
+class Department(DefaultMixin):
     name = models.CharField(max_length=100)
     def __str__(self):
         return self.name
 
-class Manufacturer(models.Model):
+class Manufacturer(DefaultMixin):
     name = models.CharField(max_length=100)
     def __str__(self):
         return self.name
 
-class Model(models.Model):
+class Model(DefaultMixin):
     name = models.CharField(max_length=100)
     manufacturer = models.ForeignKey(
         'Manufacturer',
@@ -33,10 +40,17 @@ class Model(models.Model):
     def __str__(self):
         return self.manufacturer.name + " " + self.name
 
-class Asset(models.Model):
+class OrganizationUsers(DefaultMixin):
+    firstName = models.CharField(max_length=100)
+    lastName = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.firstName + " " + self.lastName
+
+class Asset(DefaultMixin):
     name = models.CharField(max_length=100)
     tag = models.CharField(max_length=100)
-    serial = models.CharField(max_length=100)
+    serial = models.CharField(max_length=100, blank=True, null=True)
     purchaseDate = models.DateField(verbose_name="Purchase Date")
 
     organization = models.ForeignKey(
@@ -51,6 +65,12 @@ class Asset(models.Model):
         'Model',
         on_delete=models.PROTECT,
     )
+    user = models.ForeignKey(
+        'OrganizationUsers',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
 
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name

@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-6">
-        <h2>{% if object.0.manufacturer %}{{ object.0.manufacturer.name }}{% endif %} {{ object.0.value }}{% if object.0.tag %} - {{ object.0.tag }}{% endif %}</h2>
+        <h2>{{ querySet.name }}{% if querySet.tag %} - {{ querySet.tag }}{% endif %}</h2>
       </div>
     </div>
   </div>
@@ -14,7 +14,20 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        {% block view %}{% endblock %}
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">{{ tableObj.verbose_name|title }} Details</h3>
+          </div>
+          {% block view %}{% endblock %}
+          <div class="card-footer">
+            <form method="POST" action="{% url tableObj.url|add:':delete' %}">
+              {% csrf_token %}
+              <input type="hidden" name="objects" value="{{ querySet.id }}">
+              <button type="submit" class="btn btn-danger float-right ml-2" onclick="return confirm('Are you sure you want to delete this?')"><i class="fa fa-trash-alt"></i> Delete</button>
+            </form>
+            <a class="btn btn-success float-right" href="{% url tableObj.url|add:':edit' querySet.id %}"><i class="fa fa-edit"></i> Edit</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

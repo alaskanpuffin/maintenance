@@ -8,12 +8,10 @@ class Select2(widgets.Select):
     option_template_name = 'widgets/select2-options.html'
     def __init__(self, form=None, *args, **kwargs):
         self.formObj = form
-        print(form)
         super (Select2,self ).__init__(*args,**kwargs)
 
     def render(self, name, value, attrs=None, renderer=None):
         context = self.get_context(name, value, attrs)
         context['form'] = self.formObj
-        print(context)
         template = loader.get_template(self.template_name).render(context)
         return mark_safe(template)

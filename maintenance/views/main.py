@@ -9,35 +9,80 @@ from maintenance.forms import *
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.core import serializers
+from django.db.models import Q
 import json
 
 class Dashboard(LoginRequiredMixin, TemplateView):
     def get(self, request):
-        return render(request, 'dashboard.html', {})
+        data = {}
+
+        data['asset_count'] = Asset.objects.count()
+
+        return render(request, 'dashboard.html', {'data': data})
 
 class Table(LoginRequiredMixin, TemplateView):
     tableObj = None
 
     def get(self, request, *args, **kwargs):
-        assetQuerySet = self.tableObj.model.objects.order_by('-id').values()
-        if hasattr(self.tableObj, 'fields'):
-            assetQuerySet = self.tableObj.model.objects.order_by('-id').values('id', *self.tableObj.fields)
-        paginatorObj = Paginator(assetQuerySet, 5)
-
         page_number = request.GET.get('page')
+
+        self.tableObj = kwargs.get('tableObj')
+        baseQuerySet = self.tableObj.model.objects.order_by('-updated')
+
+        search = request.GET.get('search') # This function should be redone with a better solution.
+        if search:
+            queryparameters = ""
+            for field in self.tableObj.search_fields:
+                queryparameters += " Q(%s__contains=search) |" % (field,)
+
+            query = "baseQuerySet.filter(%s)" % queryparameters[:-1]
+            baseQuerySet = eval(query)
+
+        objectQuerySet = baseQuerySet.values()
+        if hasattr(self.tableObj, 'fields'):
+            objectQuerySet = baseQuerySet.values('id', *self.tableObj.fields)
+
+        object = []
+        for row in objectQuerySet:
+            rowArray = []
+            for key, value in row.items():
+                objectDict = {
+                    'name': key,
+                    'value': value
+                }
+
+                if not key.lower() in ['id', 'created', 'updated']:
+                    rowArray.append(objectDict)
+            object.append({'data': rowArray, 'id': row['id']})
+
+        paginatorObj = Paginator(object, 25)
         page_obj = paginatorObj.get_page(page_number)
 
         return render(request, 'tables/generic.html', {'table': page_obj, 'tableObj': self.tableObj, 'paginatorObj': paginatorObj})
 
 class TableForm(LoginRequiredMixin, TemplateView):
-    formObj = None
+    tableObj = None
     requestFormat = None
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'forms/generic.html', {'form': self.formObj})
+        self.tableObj = kwargs.get('tableObj')
+        form = self.tableObj.form
+
+        if kwargs.get('id'):
+            objectId = kwargs.get('id')
+            querySet = self.tableObj.model.objects.get(pk=objectId)
+            form = form(instance=querySet)
+
+        return render(request, 'forms/generic.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = self.formObj(request.POST)
+        self.tableObj = kwargs.get('tableObj')
+        form = self.tableObj.form(request.POST)
+
+        if kwargs.get('id'):
+            objectId = kwargs.get('id')
+            querySet = self.tableObj.model.objects.get(pk=objectId)
+            form = self.tableObj.form(request.POST, instance=querySet)
 
         if request.GET.get('format'):
             self.requestFormat = request.GET.get('format')
@@ -53,7 +98,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
             if self.requestFormat == 'json':
                 return HttpResponse(json.dumps(responseObj))
             else:
-                return HttpResponseRedirect(self.formObj.Meta.baseUrl)
+                return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
         else:
             if self.requestFormat == 'json':
                 responseObj['valid'] = False
@@ -67,15 +112,17 @@ class DeleteTable(LoginRequiredMixin, TemplateView):
     tableObj = None
 
     def post(self, request, *args, **kwargs):
+        self.tableObj = kwargs.get('tableObj')
         objectList = request.POST.get('objects').split(',')
 
         self.tableObj.model.objects.filter(pk__in=objectList).delete()
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
 
 class ViewTable(LoginRequiredMixin, TemplateView):
     tableObj = None
 
     def get(self, request, *args, **kwargs):
+        self.tableObj = kwargs.get('tableObj')
         objectId = kwargs['id']
         objectQuerySet = self.tableObj.model.objects.get(pk=objectId)
 
@@ -84,18 +131,17 @@ class ViewTable(LoginRequiredMixin, TemplateView):
         object = []
 
         for field in fields:
-            if not field.name == 'id':
-                data = getattr(objectQuerySet, field.name)
-                objectDict = {
-                    'name': field.verbose_name,
-                    'value': data
-                }
-                if field.get_internal_type() == 'ForeignKey':
-                    objectDict['link'] = '%sview/%s/' % (reverse(field.name), data.id)
+            data = getattr(objectQuerySet, field.name)
+            objectDict = {
+                'name': field.verbose_name,
+                'value': data
+            }
+            if field.get_internal_type() == 'ForeignKey':
+                objectDict['link'] = '%sview/%s/' % (reverse(field.name + ":main"), data.id)
 
-                object.append(objectDict)
+            object.append(objectDict)
 
-        return render(request, 'view/generic.html', {'object': object, 'tableObj': self.tableObj})
+        return render(request, 'view/generic.html', {'object': object, 'querySet': objectQuerySet,'tableObj': self.tableObj})
 
 class Logout(TemplateView):
     def get(self, request):

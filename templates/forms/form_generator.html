@@ -1,4 +1,4 @@
-<form role="form" id="form-{{ form.Meta.name }}" action="{{ form.Meta.baseUrl }}/add/" method="POST"></form>
+<form role="form" id="form-{{ form.Meta.name }}" method="POST"></form>
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" form="form-{{ form.Meta.name }}">
 <div class="card-body">
   <div class="row">

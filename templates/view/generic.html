@@ -1,23 +1,22 @@
 {% extends 'view/page_structure.html' %}
+{% load hidden_fields %}
 
 {% block view %}
-<div class="card">
-  <div class="card-header">
-    <h3 class="card-title">{{ tableObj.verbose_name|title }} Details</h3>
-  </div>
   <div class="card-body">
     <div class="card-tools">
       <table class="table table-bordered">
         <tbody>
           {% for field in object %}
-            {% if not field.name == 'id' %}
+            {% if not field.name|hidden_fields %}
             <tr>
               <th>{{ field.name|title }}</th>
-              <td>{% if field.link %}
+              <td>
+                {% if field.link %}
                   <a href="{{ field.link }}">{{ field.value }}</a>
                 {% else %}
                   {{ field.value }}
-                {% endif %}</td>
+                {% endif %}
+              </td>
             </tr>
             {% endif %}
           {% endfor %}
@@ -25,13 +24,4 @@
       </table>
     </div>
   </div>
-  <div class="card-footer">
-    <form method="POST" action="../../delete/">
-      {% csrf_token %}
-      <input type="hidden" name="objects" value="{{ object.values.0.id }}">
-      <button type="submit" class="btn btn-danger float-right ml-2"><i class="fa fa-trash-alt"></i> Delete</button>
-    </form>
-    <button type="submit" class="btn btn-success float-right"><i class="fa fa-edit"></i> Edit</button>
-  </div>
-</div>
 {% endblock %}

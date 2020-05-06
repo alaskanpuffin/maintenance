@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-6">
-        <h2>{{ tableObj.verbose_name|title }}</h2>
+        <h2>{{ tableObj.verbose_plural_name|title }}</h2>
       </div>
     </div>
   </div>
@@ -16,17 +16,26 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">All {{ tableObj.verbose_name|title }}</h3>
-            <div class="card-tools">
-              <div class="input-group input-group-sm">
-                <a type="submit" class="btn btn-success" href="add"><i class="fa fa-plus"></i></a>
-              </div>
+            <div class="float-right ml-3">
+              <a type="submit" class="btn btn-success btn-sm" href="add"><i class="fa fa-plus"></i> New</a>
             </div>
+
+            {% if tableObj.search_fields %}
+            <form class="form-inline float-right" method="get">
+              <div class="input-group input-group-sm">
+                <input type="text" name="search" value="{{ request.GET.search }}" class="form-control float-right" placeholder="Search">
+                <div class="input-group-append">
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                </div>
+              </div>
+            </form>
+            {% endif %}
           </div>
           {% block table %}{% endblock %}
           <div class="card-footer">
             <div class="card-tools">
               <ul class="pagination pagination-sm float-right">
+                {% if table.has_previous or table.has_next %}
                 {% if table.has_previous %}
                 <li class="page-item"><a class="page-link" href="?page={{ table.previous_page_number }}">«</a></li>
                 {% endif %}
@@ -35,6 +44,7 @@
                 {% endfor %}
                 {% if table.has_next %}
                 <li class="page-item"><a class="page-link" href="?page={{ table.next_page_number }}">»</a></li>
+                {% endif %}
                 {% endif %}
               </ul>
             </div>

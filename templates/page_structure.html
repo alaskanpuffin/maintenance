@@ -42,7 +42,7 @@
     </nav>
 
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
-      <a href="/" class="brand-link">
+      <a href="/" class="brand-link text-center">
         <span class="brand-text font-weight-light"><b>Maint</b>enance</span>
       </a>
 
@@ -76,12 +76,6 @@
                     <p>Add Asset</p>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a href="./index3.html" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Bulk Checkout</p>
-                  </a>
-                </li>
               </ul>
             </li>
           </ul>
@@ -96,27 +90,33 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a href="/config/organizations" class="nav-link {% if request.path == '/config/organizations/' %} active {% endif %}">
+                  <a href="/config/organizations" class="nav-link {% if '/config/organizations/' in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Organizations</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/config/departments" class="nav-link {% if request.path == '/config/departments/' %} active {% endif %}">
+                  <a href="/config/departments" class="nav-link {% if '/config/departments/' in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Departments</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/config/manufacturers" class="nav-link {% if request.path == '/config/manufacturers/' %} active {% endif %}">
+                  <a href="/config/manufacturers" class="nav-link {% if '/config/manufacturers/' in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Manufacturers</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/config/models" class="nav-link {% if request.path == '/config/models/' %} active {% endif %}">
+                  <a href="/config/models" class="nav-link {% if '/config/models/' in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Models</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/config/users" class="nav-link {% if '/config/users/' in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Users</p>
                   </a>
                 </li>
               </ul>

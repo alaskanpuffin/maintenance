@@ -28,7 +28,7 @@
       e.preventDefault();
       $.ajax({
             type: $(this).attr('method'),
-            url: $(this).attr('action') + '?format=json',
+            url: '{% url widget.name|add:":add" %}?format=json',
             data: $(this).serialize(),
             success: function (data) {
                 responseObj = $.parseJSON(data);
