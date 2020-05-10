@@ -105,4 +105,15 @@ class Asset(DefaultMixin):
     )
 
     def __str__(self):
-        return self.name
+        return self.name + " - " + self.tag
+
+class CheckoutLog(DefaultMixin):
+    user = models.ForeignKey(
+        'OrganizationUsers',
+        on_delete=models.PROTECT,
+    )
+    asset = models.ManyToManyField(Asset)
+    checkedout = models.BooleanField()
+
+    def __str__(self):
+        return self.user.firstName

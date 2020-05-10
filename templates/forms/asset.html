@@ -1,6 +1,6 @@
-{% extends 'page_structure.html' %}
+{% extends 'forms/page_structure.html' %}
 
-{% block content %}
+{% block formcontent %}
 <div class="content-header">
   <div class="container-fluid">
     <div class="row">
@@ -203,12 +203,4 @@
       </div>
     </div><br><br>
   </div>
-<script>
-  $(document).ready(function() {
-    $('.select2').select2({
-      theme: "bootstrap",
-      containerCssClass : "form-control",
-    });
-  });
-</script>
 {% endblock %}

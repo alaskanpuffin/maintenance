@@ -1,0 +1,91 @@
+{% extends 'page_structure.html' %}
+
+{% block content %}
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <h2>Batch Checkout</h2>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Checkout Form</h3>
+          </div>
+          <div class="card-body">
+            <form role="form" id="form-{{ form.Meta.name }}" method="POST"></form>
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" form="form-{{ form.Meta.name }}">
+            {% with form.user as field %}
+              <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+              {{ field }}
+            {% endwith %}
+            <br>
+            {% with form.assetSelect as field %}
+              <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+              {{ field }}
+            {% endwith %}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Assets</h3>
+          </div>
+              <div class="card-body p-0">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="assetTable">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+          <input type="submit" name="checkin" form="form-{{ form.Meta.name }}" class="btn btn-primary float-right" value="Check-in">
+          <input type="submit" name="checkout" form="form-{{ form.Meta.name }}" class="btn btn-warning float-right mr-2" value="Check-out">
+        </div>
+      </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+     $('.select2multiple').prepend("<option value selected>Select an Asset...</option>")
+
+     $('.select2').select2({
+       theme: "bootstrap",
+       containerCssClass : "form-control",
+     });
+     $('.select2multiple').select2({
+       theme: "bootstrap",
+       containerCssClass : "form-control",
+     });
+
+    $('.select2multiple').on('select2:select', function (e) {
+      var data = e.params.data;
+      if (!$('#asset' + data.id).length) {
+        $("#assetTable").append('<tr id="asset' + data.id + '"><td>' + data.text + '<input name="asset" form="form-{{ form.Meta.name }}" type="hidden" value="' + data.id + '"></td><td><button onclick="deleteAsset(' + data.id + ')" class="btn btn-danger btn-sm float-right"><i class="fa fa-trash"></i></button></td></tr>');
+      }
+      $(this).val(null).trigger('change');
+      $(this).select2('open');
+    });
+   });
+
+   function deleteAsset(id) {
+     $('#asset' + id).remove();
+   }
+</script>
+{% endblock %}

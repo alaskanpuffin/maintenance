@@ -20,6 +20,35 @@ class Dashboard(LoginRequiredMixin, TemplateView):
 
         return render(request, 'dashboard.html', {'data': data})
 
+class CheckoutFormView(LoginRequiredMixin, TemplateView):
+    def get(self, request):
+        form = CheckoutForm
+
+        return render(request, 'batch_checkout.html', {'form': form})
+
+    def post(self, request):
+        form = CheckoutForm(request.POST)
+
+        if request.POST.get('checkout'):
+            checkedout = True
+        elif request.POST.get('checkin'):
+            checkedout = False
+
+        if form.is_valid():
+            checkoutObj = form.save(commit=False)
+            checkoutObj.checkedout = checkedout
+            checkoutObj.save()
+            form.save_m2m()
+            
+            if checkedout:
+                form.cleaned_data['asset'].all().update(user=form.cleaned_data['user'], status='inuse')
+            else:
+                form.cleaned_data['asset'].all().update(user=None, department=None, status='instore')
+
+            return HttpResponseRedirect(reverse('checkoutform'))
+        else:
+            return HttpResponse(form.errors.as_json())
+
 class Table(LoginRequiredMixin, TemplateView):
     tableObj = None
 
@@ -143,6 +172,13 @@ class ViewTable(LoginRequiredMixin, TemplateView):
                 'name': field.verbose_name,
                 'value': data
             }
+
+            if not field.choices == None:
+               print(field.choices)
+               for choice in field.choices:
+                   if data in choice[0]:
+                       objectDict['value'] = choice[1]
+
             if field.get_internal_type() == 'ForeignKey' and data:
                 objectDict['link'] = '%sview/%s/' % (reverse(field.name + ":main"), data.id)
 

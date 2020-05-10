@@ -1,0 +1,13 @@
+{% extends 'page_structure.html' %}
+
+{% block content %}
+{% block formcontent %}{% endblock %}
+<script>
+  $(document).ready(function() {
+     $('.select2').select2({
+       theme: "bootstrap",
+       containerCssClass : "form-control",
+     });
+   });
+</script>
+{% endblock %}

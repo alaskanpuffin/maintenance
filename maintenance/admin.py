@@ -23,4 +23,8 @@ class ModelAdmin(admin.ModelAdmin):
 class AssetAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(CheckoutLog)
+class AssetAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(CustomUser, UserAdmin)

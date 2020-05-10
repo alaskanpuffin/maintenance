@@ -16,12 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from .views.main import Dashboard, Table, TableForm, DeleteTable, ViewTable, Logout
+from .views.main import Dashboard, Table, TableForm, DeleteTable, ViewTable, Logout, CheckoutFormView
 from django.conf.urls.static import static
 from django.conf import settings
 from .tables import *
 from .forms import *
+from .views.api import AssetApiViewSet, ModelApiViewSet
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'assets', AssetApiViewSet)
+router.register(r'models', ModelApiViewSet)
 
 tablepatterns = ([
     path('', Table.as_view(), name="main"),
@@ -40,9 +46,12 @@ urlpatterns = [
     path('config/models/', include(tablepatterns, namespace='model'), {'tableObj': ModelTable}),
     path('config/users/', include(tablepatterns, namespace='user'), {'tableObj': UserTable}),
     path('config/suppliers/', include(tablepatterns, namespace='supplier'), {'tableObj': SupplierTable}),
+    path('assets/checkoutform/', CheckoutFormView.as_view(), name="checkoutform"),
     path('login/', auth_views.LoginView.as_view()),
     path('logout/', Logout.as_view()),
     path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

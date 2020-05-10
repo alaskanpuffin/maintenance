@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django.utils import timezone
 from django.forms import BaseModelFormSet
 from .models import *
-from .widgets import Select2
+from .widgets import Select2, Select2Multiple
 
 class BootstrapFormMixin(forms.Form):
     def __init__(self,*args,**kwargs):
@@ -84,4 +84,13 @@ class AssetForm(ModelForm, BootstrapFormMixin):
         baseUrl = '/assets'
         model = Asset
         name = "Asset"
+        fields = '__all__'
+
+class CheckoutForm(ModelForm, BootstrapFormMixin):
+    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm))
+    assetSelect = forms.ModelMultipleChoiceField(queryset=Asset.objects.all(), widget=Select2Multiple(form=UserForm), required=False, label="Asset")
+
+    class Meta:
+        model = CheckoutLog
+        name = "Checkout"
         fields = '__all__'
