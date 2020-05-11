@@ -12,6 +12,7 @@ from django.core import serializers
 from django.db.models import Q
 import json
 
+
 class Dashboard(LoginRequiredMixin, TemplateView):
     def get(self, request):
         data = {}
@@ -19,6 +20,7 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         data['asset_count'] = Asset.objects.count()
 
         return render(request, 'dashboard.html', {'data': data})
+
 
 class CheckoutFormView(LoginRequiredMixin, TemplateView):
     def get(self, request):
@@ -39,15 +41,18 @@ class CheckoutFormView(LoginRequiredMixin, TemplateView):
             checkoutObj.checkedout = checkedout
             checkoutObj.save()
             form.save_m2m()
-            
+
             if checkedout:
-                form.cleaned_data['asset'].all().update(user=form.cleaned_data['user'], status='inuse')
+                form.cleaned_data['asset'].all().update(
+                    user=form.cleaned_data['user'], status='inuse')
             else:
-                form.cleaned_data['asset'].all().update(user=None, department=None, status='instore')
+                form.cleaned_data['asset'].all().update(
+                    user=None, department=None, status='instore')
 
             return HttpResponseRedirect(reverse('checkoutform'))
         else:
             return HttpResponse(form.errors.as_json())
+
 
 class Table(LoginRequiredMixin, TemplateView):
     tableObj = None
@@ -58,7 +63,8 @@ class Table(LoginRequiredMixin, TemplateView):
         self.tableObj = kwargs.get('tableObj')
         baseQuerySet = self.tableObj.model.objects.order_by('-updated')
 
-        search = request.GET.get('search') # This function should be redone with a better solution.
+        # This function should be redone with a better solution.
+        search = request.GET.get('search')
         if search:
             queryparameters = ""
             for field in self.tableObj.search_fields:
@@ -88,6 +94,7 @@ class Table(LoginRequiredMixin, TemplateView):
         page_obj = paginatorObj.get_page(page_number)
 
         return render(request, 'tables/generic.html', {'table': page_obj, 'tableObj': self.tableObj, 'paginatorObj': paginatorObj})
+
 
 class TableForm(LoginRequiredMixin, TemplateView):
     tableObj = None
@@ -144,6 +151,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
             else:
                 return render(request, self.template, {'form': form, 'tableObj': self.tableObj})
 
+
 class DeleteTable(LoginRequiredMixin, TemplateView):
     tableObj = None
 
@@ -153,6 +161,7 @@ class DeleteTable(LoginRequiredMixin, TemplateView):
 
         self.tableObj.model.objects.filter(pk__in=objectList).delete()
         return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
+
 
 class ViewTable(LoginRequiredMixin, TemplateView):
     tableObj = None
@@ -174,17 +183,19 @@ class ViewTable(LoginRequiredMixin, TemplateView):
             }
 
             if not field.choices == None:
-               print(field.choices)
-               for choice in field.choices:
-                   if data in choice[0]:
-                       objectDict['value'] = choice[1]
+                print(field.choices)
+                for choice in field.choices:
+                    if data in choice[0]:
+                        objectDict['value'] = choice[1]
 
             if field.get_internal_type() == 'ForeignKey' and data:
-                objectDict['link'] = '%sview/%s/' % (reverse(field.name + ":main"), data.id)
+                objectDict['link'] = '%sview/%s/' % (
+                    reverse(field.name + ":main"), data.id)
 
             object.append(objectDict)
 
-        return render(request, 'view/generic.html', {'object': object, 'querySet': objectQuerySet,'tableObj': self.tableObj})
+        return render(request, 'view/generic.html', {'object': object, 'querySet': objectQuerySet, 'tableObj': self.tableObj})
+
 
 class Logout(TemplateView):
     def get(self, request):
