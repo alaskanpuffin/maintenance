@@ -1,3 +1,4 @@
+{% load verbose_names %}
 <form role="form" id="form-{{ form.Meta.name }}" method="POST" novalidate></form>
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" form="form-{{ form.Meta.name }}">
 <div class="card-body">
@@ -5,7 +6,7 @@
     {% for field in form %}
       <div class="col-6">
         <div class="form-group">
-          <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+          <label for="{{ field.id_for_label }}">{% get_verbose_field_name form.Meta.model field.name %}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
           {{ field }}
         </div>
       </div>

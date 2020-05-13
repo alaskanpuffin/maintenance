@@ -53,8 +53,9 @@ class Model(DefaultMixin):
         return self.manufacturer.name + " " + self.name
 
 class OrganizationUsers(DefaultMixin):
-    firstName = models.CharField(max_length=100)
-    lastName = models.CharField(max_length=100)
+    firstName = models.CharField(max_length=100, verbose_name="First Name")
+    lastName = models.CharField(max_length=100, verbose_name="Last Name")
+    userId = models.CharField(max_length=100, verbose_name="User ID")
 
     def __str__(self):
         return self.firstName + " " + self.lastName
@@ -62,7 +63,7 @@ class OrganizationUsers(DefaultMixin):
 class Asset(DefaultMixin):
     # General Information
     name = models.CharField(max_length=100)
-    tag = models.CharField(max_length=100)
+    tag = models.CharField(max_length=100, verbose_name="Tag/Barcode")
     site = models.ForeignKey(
         'Site',
         on_delete=models.PROTECT,
@@ -82,7 +83,9 @@ class Asset(DefaultMixin):
     STATUS_CHOICES = [
         ('instore', 'In Store'),
         ('inuse', 'In Use'),
+        ('onorder', 'On Order'),
         ('inrepair', 'In Repair'),
+        ('discontinued', 'Discontinued'),
         ('disposed', 'Disposed'),
     ]
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="instore")
@@ -95,7 +98,7 @@ class Asset(DefaultMixin):
         blank=True,
         null=True
     )
-    purchaseCost = models.IntegerField(blank=True, null=True)
+    purchaseCost = models.IntegerField(blank=True, null=True, verbose_name="Purchase Cost")
 
     # Lifetime Information
     warrantyExpiration = models.DateField(verbose_name="Warranty Expiration Date", blank=True, null=True)
@@ -143,8 +146,8 @@ class ConsumableLedger(DefaultMixin):
         on_delete=models.PROTECT,
     )
     ACTION_CHOICES = [
-        ('in', 'In'),
-        ('out', 'Out'),
+        ('in', 'Receive'),
+        ('out', 'Checkout'),
     ]
     action = models.CharField(max_length=20, choices=ACTION_CHOICES)
     quantity = models.IntegerField()
