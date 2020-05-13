@@ -40,7 +40,10 @@ tablepatterns = ([
 urlpatterns = [
     path('', Dashboard.as_view()),
     path('assets/', include(tablepatterns, namespace='asset'), {'tableObj': AssetTable}),
+    path('consumables/consumables/', include(tablepatterns, namespace='consumable'), {'tableObj': ConsumableTable}),
+    path('consumables/consumableledger/', include(tablepatterns, namespace='consumableledger'), {'tableObj': ConsumableLedgerTable}),
     path('config/sites/', include(tablepatterns, namespace='site'), {'tableObj': SiteTable}),
+    path('config/categories/', include(tablepatterns, namespace='category'), {'tableObj': CategoryTable}),
     path('config/departments/', include(tablepatterns, namespace='department'), {'tableObj': DepartmentTable}),
     path('config/manufacturers/', include(tablepatterns, namespace='manufacturer'), {'tableObj': ManufacturerTable}),
     path('config/models/', include(tablepatterns, namespace='model'), {'tableObj': ModelTable}),

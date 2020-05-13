@@ -183,7 +183,6 @@ class ViewTable(LoginRequiredMixin, TemplateView):
             }
 
             if not field.choices == None:
-                print(field.choices)
                 for choice in field.choices:
                     if data in choice[0]:
                         objectDict['value'] = choice[1]

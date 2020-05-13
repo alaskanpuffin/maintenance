@@ -29,6 +29,12 @@ class SiteForm(ModelForm, BootstrapFormMixin):
         name = "Site"
         fields = '__all__'
 
+class CategoryForm(ModelForm, BootstrapFormMixin):
+    class Meta:
+        model = Category
+        name = "Category"
+        fields = '__all__'
+
 class DepartmentForm(ModelForm, BootstrapFormMixin):
     class Meta:
         baseUrl = '/config/departments'
@@ -68,6 +74,7 @@ class SupplierForm(ModelForm, BootstrapFormMixin):
 
 class AssetForm(ModelForm, BootstrapFormMixin):
     site = forms.ModelChoiceField(queryset=Site.objects.all(), widget=Select2(form=SiteForm))
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=Select2(form=CategoryForm))
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm), required=False)
     model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
     user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm), required=False)
@@ -84,6 +91,24 @@ class AssetForm(ModelForm, BootstrapFormMixin):
         baseUrl = '/assets'
         model = Asset
         name = "Asset"
+        fields = '__all__'
+
+class ConsumableForm(ModelForm, BootstrapFormMixin):
+    site = forms.ModelChoiceField(queryset=Site.objects.all(), widget=Select2(form=SiteForm))
+    manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), widget=Select2(form=ManufacturerForm))
+
+    class Meta:
+        model = Consumable
+        name = "Consumable"
+        fields = '__all__'
+
+class ConsumableLedgerForm(ModelForm, BootstrapFormMixin):
+    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm), required=False)
+    consumable = forms.ModelChoiceField(queryset=Consumable.objects.all(), widget=Select2(form=ConsumableForm))
+
+    class Meta:
+        model = ConsumableLedger
+        name = "Consumable Ledger"
         fields = '__all__'
 
 class CheckoutForm(ModelForm, BootstrapFormMixin):

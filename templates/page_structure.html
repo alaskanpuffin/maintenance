@@ -87,6 +87,49 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item has-treeview {% if '/consumables/' in request.path %} menu-open {% endif %}">
+              <a href="/assets/" class="nav-link {% if 'consumables/' in request.path %} active {% endif %}">
+                <i class="nav-icon fas fa-tint"></i>
+                <p>
+                  Consumables
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  {% url 'consumable:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>All Consumables</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  {% url 'consumableledger:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Ledger</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            {% comment %} <li class="nav-item has-treeview {% if '/purchasing/' in request.path %} menu-open {% endif %}">
+              <a href="/assets/" class="nav-link {% if 'purchasing/' in request.path %} active {% endif %}">
+                <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                <p>
+                  Purchasing
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  {% url 'purchaseorder:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Purchase Orders</p>
+                  </a>
+                </li>
+              </ul>
+            </li> {% endcomment %}
           </ul>
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item has-treeview {% if '/config/' in request.path %} menu-open {% endif %}">
@@ -103,6 +146,13 @@
                   <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Sites</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  {% url 'category:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Categories</p>
                   </a>
                 </li>
                 <li class="nav-item">

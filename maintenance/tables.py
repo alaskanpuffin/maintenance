@@ -7,8 +7,26 @@ class AssetTable():
     verbose_name = "Asset"
     verbose_plural_name = "Assets"
     url = 'asset'
-    fields = ('name', 'tag', 'status', 'model__name')
+    fields = ('name', 'tag', 'category__name', 'status', 'model__name')
     search_fields = ('name', 'tag')
+
+class ConsumableTable():
+    model = Consumable
+    form = ConsumableForm
+    verbose_name = "Consumable"
+    verbose_plural_name = "Consumables"
+    url = 'consumable'
+    fields = ('name', 'manufacturer__name', 'site__name', 'quantity')
+    search_fields = ('name',)
+
+class ConsumableLedgerTable():
+    model = ConsumableLedger
+    form = ConsumableLedgerForm
+    verbose_name = "Consumable Ledger Entry"
+    verbose_plural_name = "Consumable Ledger"
+    url = 'consumableledger'
+    fields = ('consumable__name', 'action', 'quantity')
+    search_fields = ('consumable__name', 'purchaseOrderId')
 
 class DepartmentTable():
     model = Department
@@ -23,6 +41,13 @@ class SiteTable():
     verbose_name = "Site"
     verbose_plural_name = "Sites"
     url = 'site'
+
+class CategoryTable():
+    model = Category
+    form = CategoryForm
+    verbose_name = "Category"
+    verbose_plural_name = "Categories"
+    url = 'category'
 
 class ManufacturerTable():
     model = Manufacturer
