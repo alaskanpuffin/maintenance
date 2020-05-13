@@ -67,7 +67,7 @@ class ModelTable():
 class UserTable():
     model = OrganizationUsers
     form = UserForm
-    fields = ('firstName', 'lastName')
+    fields = ('firstName', 'lastName', 'userId')
     verbose_name = "User"
     verbose_plural_name = "Users"
     url = 'user'
