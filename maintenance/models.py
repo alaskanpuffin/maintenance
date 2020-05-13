@@ -117,3 +117,20 @@ class CheckoutLog(DefaultMixin):
 
     def __str__(self):
         return self.user.firstName
+
+# Purchasing
+class PurchaseOrder(DefaultMixin):
+    supplier = models.ForeignKey(
+        'Supplier',
+        on_delete=models.PROTECT
+    )
+    taxRate = models.DecimalField(max_digits=3, decimal_places=2)
+    discount = models.IntegerField(default=0)
+
+class PurchaseOrderRow(DefaultMixin):
+    purchaseOrder = models.ForeignKey(
+        'PurchaseOrder',
+        on_delete=models.PROTECT
+    )
+    price = models.IntegerField()
+    quantity = models.IntegerField(default=1)
