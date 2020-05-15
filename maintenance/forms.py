@@ -3,7 +3,9 @@ from django.forms import ModelForm
 from django.utils import timezone
 from django.forms import BaseModelFormSet
 from .models import *
-from .widgets import Select2, Select2Multiple
+from .widgets import Select2, Select2NoAdd, Select2Multiple
+from django.db.models import Q
+from functools import reduce
 
 class BootstrapFormMixin(forms.Form):
     def __init__(self,*args,**kwargs):
@@ -93,6 +95,27 @@ class AssetForm(ModelForm, BootstrapFormMixin):
         name = "Asset"
         fields = '__all__'
 
+class ComponentForm(ModelForm, BootstrapFormMixin):
+    site = forms.ModelChoiceField(queryset=Site.objects.all(), widget=Select2(form=SiteForm))
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=Select2(form=CategoryForm))
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm), required=False)
+    model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
+    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm), required=False)
+    asset = forms.ModelChoiceField(queryset=Asset.objects.all(), widget=Select2NoAdd(form=AssetForm), required=False)
+    supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
+
+    def __init__(self,*args,**kwargs):
+        super (ComponentForm,self ).__init__(*args,**kwargs)
+
+        self.fields['purchaseDate'].widget.attrs['class'] = 'form-control datepicker'
+        self.fields['warrantyExpiration'].widget.attrs['class'] = 'form-control datepicker'
+
+    class Meta:
+        customTemplate = 'forms/component.html'
+        model = Component
+        name = "Component"
+        fields = '__all__'
+
 class ConsumableForm(ModelForm, BootstrapFormMixin):
     site = forms.ModelChoiceField(queryset=Site.objects.all(), widget=Select2(form=SiteForm))
     manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), widget=Select2(form=ManufacturerForm))
@@ -112,8 +135,9 @@ class ConsumableLedgerForm(ModelForm, BootstrapFormMixin):
         fields = '__all__'
 
 class CheckoutForm(ModelForm, BootstrapFormMixin):
+    validStatus = ['instore', 'inuse']
     user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm))
-    assetSelect = forms.ModelMultipleChoiceField(queryset=Asset.objects.all(), widget=Select2Multiple(form=UserForm), required=False, label="Asset")
+    assetSelect = forms.ModelMultipleChoiceField(queryset=Asset.objects.filter(reduce(lambda x, y: x | y, [Q(status=item) for item in validStatus])), widget=Select2Multiple(form=UserForm), required=False, label="Asset")
 
     class Meta:
         model = CheckoutLog

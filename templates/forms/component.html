@@ -1,0 +1,214 @@
+{% extends 'forms/page_structure.html' %}
+
+{% block formcontent %}
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6">
+        <h2>{{ form.Meta.name }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form role="form" id="form-{{ form.Meta.name }}" method="POST" novalidate></form>
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" form="form-{{ form.Meta.name }}">
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card card-primary">
+          <div class="card-header">
+              <h3 class="card-title">General Information</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.name as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.tag as field %}
+                    <label for="{{ field.id_for_label }}">Tag/Barcode{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.status as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.model as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.site as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.category as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.location as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card card-secondary">
+          <div class="card-header">
+              <h3 class="card-title">Extra Information</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.serial as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.notes as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.warrantyExpiration as field %}
+                    <label for="{{ field.id_for_label }}">Warranty Expiration Date{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-secondary">
+          <div class="card-header">
+              <h3 class="card-title">Purchasing Information</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.purchaseDate as field %}
+                    <label for="{{ field.id_for_label }}">Purchase Date{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.purchaseCost as field %}
+                    <label for="{{ field.id_for_label }}">Purchase Cost{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.supplier as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card card-secondary">
+          <div class="card-header">
+              <h3 class="card-title">Checkout</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                  <i class="fas fa-minus"></i></button>
+              </div>
+            </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.user as field %}
+                    <label for="{{ field.id_for_label }}">User{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.department as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  {% with form.asset as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    {{ field }}
+                  {% endwith %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary float-right">Submit</button>
+      </div>
+    </div><br><br>
+  </div>
+{% endblock %}

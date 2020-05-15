@@ -18,6 +18,8 @@ class Dashboard(LoginRequiredMixin, TemplateView):
         data = {}
 
         data['asset_count'] = Asset.objects.count()
+        data['component_count'] = Component.objects.count()
+        data['consumable_count'] = Consumable.objects.count()
 
         return render(request, 'dashboard.html', {'data': data})
 
@@ -61,7 +63,7 @@ class Table(LoginRequiredMixin, TemplateView):
         page_number = request.GET.get('page')
 
         self.tableObj = kwargs.get('tableObj')
-        baseQuerySet = self.tableObj.model.objects.order_by('-updated')
+        baseQuerySet = self.tableObj.model.objects.order_by('-created')
 
         # This function should be redone with a better solution.
         search = request.GET.get('search')
@@ -85,6 +87,15 @@ class Table(LoginRequiredMixin, TemplateView):
                     'name': key,
                     'value': value
                 }
+
+                if value == 'instore':
+                    objectDict['value'] = 'In Store'
+                elif value == 'inuse':
+                    objectDict['value'] = 'In Use'
+                elif value == 'inrepair':
+                    objectDict['value'] = 'In Repair'
+                elif value == 'onorder':
+                    objectDict['value'] = 'On Order'
 
                 if not key.lower() in ['id', 'created', 'updated']:
                     rowArray.append(objectDict)

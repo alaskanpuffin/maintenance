@@ -118,14 +118,6 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  {% with form.purchaseDate as field %}
-                    <label for="{{ field.id_for_label }}">Purchase Date{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
-                    {{ field }}
-                  {% endwith %}
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
                   {% with form.warrantyExpiration as field %}
                     <label for="{{ field.id_for_label }}">Warranty Expiration Date{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
@@ -207,7 +199,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <button type="submit" form="form-Asset" class="btn btn-primary float-right">Submit</button>
+        <button type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary float-right">Submit</button>
       </div>
     </div><br><br>
   </div>

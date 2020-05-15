@@ -119,6 +119,73 @@ class Asset(DefaultMixin):
     )
 
     def __str__(self):
+        return self.name + " - " + self.model.manufacturer.name + " " + self.model.name + " - " + self.tag
+
+class Component(DefaultMixin):
+    # General Information
+    name = models.CharField(max_length=100)
+    tag = models.CharField(max_length=100, verbose_name="Tag/Barcode")
+    site = models.ForeignKey(
+        'Site',
+        on_delete=models.PROTECT,
+    )
+    category = models.ForeignKey(
+        'Category',
+        on_delete=models.PROTECT,
+    )
+    model = models.ForeignKey(
+        'Model',
+        on_delete=models.PROTECT,
+    )
+    serial = models.CharField(max_length=100, blank=True, null=True)
+    location = models.CharField(max_length=500, blank=True, null=True)
+    notes = models.CharField(max_length=1000, blank=True, null=True)
+
+    STATUS_CHOICES = [
+        ('instore', 'In Store'),
+        ('inuse', 'In Use'),
+        ('onorder', 'On Order'),
+        ('inrepair', 'In Repair'),
+        ('discontinued', 'Discontinued'),
+        ('disposed', 'Disposed'),
+    ]
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="instore")
+
+    # Purchasing Information
+    purchaseDate = models.DateField(verbose_name="Purchase Date", blank=True, null=True)
+    supplier = models.ForeignKey(
+        'Supplier',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+    purchaseCost = models.IntegerField(blank=True, null=True, verbose_name="Purchase Cost")
+
+    # Lifetime Information
+    warrantyExpiration = models.DateField(verbose_name="Warranty Expiration Date", blank=True, null=True)
+    manufactureDate = models.DateField(verbose_name="Manufacture Date", blank=True, null=True)
+
+    # Checkout Information
+    user = models.ForeignKey(
+        'OrganizationUsers',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+    department = models.ForeignKey(
+        'Department',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+    asset = models.ForeignKey(
+        'Asset',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
         return self.name + " - " + self.tag
 
 class Consumable(DefaultMixin):

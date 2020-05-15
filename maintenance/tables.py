@@ -10,6 +10,15 @@ class AssetTable():
     fields = ('name', 'tag', 'category__name', 'status', 'model__name')
     search_fields = ('name', 'tag')
 
+class ComponentTable():
+    model = Component
+    form = ComponentForm
+    verbose_name = "Component"
+    verbose_plural_name = "Components"
+    url = 'component'
+    fields = ('name', 'tag', 'category__name', 'status', 'model__name')
+    search_fields = ('name', 'tag')
+
 class ConsumableTable():
     model = Consumable
     form = ConsumableForm
