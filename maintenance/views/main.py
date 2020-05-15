@@ -11,6 +11,8 @@ from django.urls import reverse
 from django.core import serializers
 from django.db.models import Q
 import json
+from django.contrib import messages
+from django.db.models import ProtectedError
 
 
 class Dashboard(LoginRequiredMixin, TemplateView):
@@ -166,12 +168,24 @@ class TableForm(LoginRequiredMixin, TemplateView):
 class DeleteTable(LoginRequiredMixin, TemplateView):
     tableObj = None
 
+    def get(self, request, *args, **kwargs):
+        self.tableObj = kwargs.get('tableObj')
+
+        return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
+
     def post(self, request, *args, **kwargs):
         self.tableObj = kwargs.get('tableObj')
         objectList = request.POST.get('objects').split(',')
 
-        self.tableObj.model.objects.filter(pk__in=objectList).delete()
-        return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
+        try:
+            deleteObj = self.tableObj.model.objects.filter(pk__in=objectList)
+            deleteObj.delete()
+            for row in deleteObj:
+                messages.success(request, '%s has been deleted.' % row.__str__())
+            return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
+        except ProtectedError as e:
+            messages.error(request, e[0])
+            return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
 
 
 class ViewTable(LoginRequiredMixin, TemplateView):
