@@ -6,6 +6,7 @@ from .models import *
 from .widgets import Select2, Select2NoAdd, Select2Multiple
 from django.db.models import Q
 from functools import reduce
+from django.contrib.auth.hashers import make_password
 
 class BootstrapFormMixin(forms.Form):
     def __init__(self,*args,**kwargs):
@@ -61,11 +62,26 @@ class ModelsForm(ModelForm, BootstrapFormMixin):
         fields = '__all__'
 
 class UserForm(ModelForm, BootstrapFormMixin):
+    password = forms.CharField(widget=forms.PasswordInput(), required=False)
+
+    def save(self, commit=True):
+        instance = super(UserForm, self).save(commit=False)
+        userObj = CustomUser.objects.get(pk=instance.id)
+        if not self.cleaned_data['password'] == "":
+            print(self.cleaned_data['password'])
+            instance.password = make_password(self.cleaned_data['password'])
+        else:
+            instance.password = userObj.password
+
+        if commit:
+            instance.save()
+        return instance
+
     class Meta:
         baseUrl = '/config/users'
-        model = OrganizationUsers
+        model = CustomUser
         name = "User"
-        fields = '__all__'
+        fields = ('username', 'first_name', 'last_name', 'email', 'userId', 'password')
 
 class SupplierForm(ModelForm, BootstrapFormMixin):
     class Meta:
@@ -79,7 +95,7 @@ class AssetForm(ModelForm, BootstrapFormMixin):
     category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=Select2(form=CategoryForm))
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm), required=False)
     model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
-    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm), required=False)
+    user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm), required=False)
     supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
 
     def __init__(self,*args,**kwargs):
@@ -100,7 +116,7 @@ class ComponentForm(ModelForm, BootstrapFormMixin):
     category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=Select2(form=CategoryForm))
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm), required=False)
     model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
-    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm), required=False)
+    user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm), required=False)
     asset = forms.ModelChoiceField(queryset=Asset.objects.all(), widget=Select2NoAdd(form=AssetForm), required=False)
     supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
 
@@ -126,7 +142,7 @@ class ConsumableForm(ModelForm, BootstrapFormMixin):
         fields = '__all__'
 
 class ConsumableLedgerForm(ModelForm, BootstrapFormMixin):
-    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm), required=False)
+    user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm), required=False)
     consumable = forms.ModelChoiceField(queryset=Consumable.objects.all(), widget=Select2(form=ConsumableForm))
 
     class Meta:
@@ -135,11 +151,17 @@ class ConsumableLedgerForm(ModelForm, BootstrapFormMixin):
         fields = '__all__'
 
 class CheckoutForm(ModelForm, BootstrapFormMixin):
-    validStatus = ['instore', 'inuse']
-    user = forms.ModelChoiceField(queryset=OrganizationUsers.objects.all(), widget=Select2(form=UserForm))
+    validStatus = ['instore']
+    user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm))
     assetSelect = forms.ModelMultipleChoiceField(queryset=Asset.objects.filter(reduce(lambda x, y: x | y, [Q(status=item) for item in validStatus])), widget=Select2Multiple(form=UserForm), required=False, label="Asset")
 
     class Meta:
         model = CheckoutLog
         name = "Checkout"
+        fields = '__all__'
+
+class PurchaseOrderForm(ModelForm, BootstrapFormMixin):
+    class Meta:
+        model = PurchaseOrder
+        name = "Purchase Order"
         fields = '__all__'
