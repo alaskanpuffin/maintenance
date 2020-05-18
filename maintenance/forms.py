@@ -157,7 +157,19 @@ class CheckoutForm(ModelForm, BootstrapFormMixin):
 
     class Meta:
         model = CheckoutLog
-        name = "Checkout"
+        name = "Batch Checkout"
+        type = "checkout"
+        fields = '__all__'
+
+class CheckinForm(ModelForm, BootstrapFormMixin):
+    validStatus = ['inuse']
+    user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm))
+    assetSelect = forms.ModelMultipleChoiceField(queryset=Asset.objects.filter(reduce(lambda x, y: x | y, [Q(status=item) for item in validStatus])), widget=Select2Multiple(form=UserForm), required=False, label="Asset")
+
+    class Meta:
+        model = CheckoutLog
+        name = "Batch Checkin"
+        type = "checkin"
         fields = '__all__'
 
 class PurchaseOrderForm(ModelForm, BootstrapFormMixin):

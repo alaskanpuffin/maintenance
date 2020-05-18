@@ -12,6 +12,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/adminlte.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datepicker3.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/toastr.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   <link href="{% static 'fonts/fontawesome/css/all.css' %}" rel="stylesheet">
   <script src="{% static 'js/adminlte.min.js' %}"></script>
@@ -19,6 +20,7 @@
   <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
   <script src="{% static 'js/select2.full.min.js' %}"></script>
   <script src="{% static 'js/js.cookie.min.js' %}"></script>
+  <script src="{% static 'js/toastr.min.js' %}"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -48,13 +50,6 @@
       <a href="/" class="brand-link text-center">
         <span class="brand-text font-weight-light"><b>Maint</b>enance</span>
       </a>
-      {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
 
       <div class="sidebar">
         <nav class="mt-2">
@@ -90,6 +85,12 @@
                   <a href="/assets/checkoutform/" class="nav-link {% if request.path == '/assets/checkoutform/' %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Batch Checkout</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/assets/checkinform/" class="nav-link {% if request.path == '/assets/checkinform/' %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Batch Checkin</p>
                   </a>
                 </li>
               </ul>
@@ -229,6 +230,15 @@
   </div>
   <script>
     $('.datepicker').datepicker({});
+    {% if messages %}
+      {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+          toastr.error('{{ message }}');
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+          toastr.success('{{ message }}');
+        {% endif %}
+      {% endfor %}
+    {% endif %}
   </script>
 </body>
 </html>

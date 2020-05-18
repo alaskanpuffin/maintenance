@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-6">
-        <h2>Batch Checkout</h2>
+        <h2>{{ form.Meta.name }}</h2>
       </div>
     </div>
   </div>
@@ -16,7 +16,7 @@
       <div class="col-md-4">
         <div class="card card-primary">
           <div class="card-header">
-            <h3 class="card-title">Checkout Form</h3>
+            <h3 class="card-title">{{ form.Meta.name }}</h3>
           </div>
           <div class="card-body">
             <form role="form" id="form-{{ form.Meta.name }}" method="POST"></form>
@@ -27,7 +27,7 @@
             {% endwith %}
             <br>
             {% with form.assetSelect as field %}
-              <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+              <label for="{{ field.id_for_label }}">Select Asset{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
               {{ field }}
             {% endwith %}
           </div>
@@ -55,8 +55,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-          <input type="submit" name="checkin" form="form-{{ form.Meta.name }}" class="btn btn-primary float-right" value="Check-in">
-          <input type="submit" name="checkout" form="form-{{ form.Meta.name }}" class="btn btn-warning float-right mr-2" value="Check-out">
+          <input type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary float-right" value="Submit">
         </div>
       </div>
   </div>

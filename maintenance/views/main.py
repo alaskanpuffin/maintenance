@@ -27,17 +27,19 @@ class Dashboard(LoginRequiredMixin, TemplateView):
 
 
 class CheckoutFormView(LoginRequiredMixin, TemplateView):
-    def get(self, request):
-        form = CheckoutForm
+    objForm = None
+
+    def get(self, request, *args, **kwargs):
+        form = kwargs.get('objForm')
 
         return render(request, 'batch_checkout.html', {'form': form})
 
-    def post(self, request):
-        form = CheckoutForm(request.POST)
+    def post(self, request, *args, **kwargs):
+        form = kwargs.get('objForm')(request.POST)
 
-        if request.POST.get('checkout'):
+        if form.Meta.type == "checkout":
             checkedout = True
-        elif request.POST.get('checkin'):
+        elif form.Meta.type == "checkin":
             checkedout = False
 
         if form.is_valid():
@@ -49,13 +51,17 @@ class CheckoutFormView(LoginRequiredMixin, TemplateView):
             if checkedout:
                 form.cleaned_data['asset'].all().update(
                     user=form.cleaned_data['user'], status='inuse')
+                messages.success(request, "The selected assets have been checked out.")
+                return HttpResponseRedirect(reverse('checkoutform'))
             else:
                 form.cleaned_data['asset'].all().update(
                     user=None, department=None, status='instore')
-
-            return HttpResponseRedirect(reverse('checkoutform'))
+                messages.success(request, "The selected assets have been checked in.")
+                return HttpResponseRedirect(reverse('checkinform'))
         else:
-            return HttpResponse(form.errors.as_json())
+            for error in form.errors:
+                messages.error(request, "An error has occured: %s" % error)
+            return HttpResponseRedirect(reverse('asset:main'))
 
 
 class Table(LoginRequiredMixin, TemplateView):
@@ -154,6 +160,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
             if self.requestFormat == 'json':
                 return HttpResponse(json.dumps(responseObj))
             else:
+                messages.success(request, "A record in %s has been successfully created." % self.tableObj.verbose_name)
                 return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
         else:
             if self.requestFormat == 'json':
@@ -179,12 +186,13 @@ class DeleteTable(LoginRequiredMixin, TemplateView):
 
         try:
             deleteObj = self.tableObj.model.objects.filter(pk__in=objectList)
-            deleteObj.delete()
             for row in deleteObj:
                 messages.success(request, '%s has been deleted.' % row.__str__())
+                
+            deleteObj.delete()
             return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
         except ProtectedError as e:
-            messages.error(request, e[0])
+            messages.error(request, str(e))
             return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
 
 
