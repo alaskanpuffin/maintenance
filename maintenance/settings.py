@@ -85,9 +85,18 @@ WSGI_APPLICATION = 'maintenance.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
-    }
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'maintenance',
+        'USER': 'scaleguy',
+        'PASSWORD': 'Fis&Foo#',
+        'HOST': '10.0.35.7',
+        'PORT': '',
+
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
+    },
+
 }
 
 
