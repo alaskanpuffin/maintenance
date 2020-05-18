@@ -10,12 +10,11 @@ class DefaultMixin(models.Model):
     class Meta:
         abstract = True
 
-class CustomUser(AbstractUser):
-    pass
-    # add additional fields in here
+class CustomUser(AbstractUser, DefaultMixin):
+    userId = models.CharField(max_length=100, verbose_name="User ID")
 
     def __str__(self):
-        return self.username
+        return self.first_name + " " + self.last_name + " - " + self.userId
 
 class Site(DefaultMixin):
     name = models.CharField(max_length=100)
@@ -51,14 +50,6 @@ class Model(DefaultMixin):
 
     def __str__(self):
         return self.manufacturer.name + " " + self.name
-
-class OrganizationUsers(DefaultMixin):
-    firstName = models.CharField(max_length=100, verbose_name="First Name")
-    lastName = models.CharField(max_length=100, verbose_name="Last Name")
-    userId = models.CharField(max_length=100, verbose_name="User ID")
-
-    def __str__(self):
-        return self.firstName + " " + self.lastName
 
 class Asset(DefaultMixin):
     # General Information
@@ -106,7 +97,7 @@ class Asset(DefaultMixin):
 
     # Checkout Information
     user = models.ForeignKey(
-        'OrganizationUsers',
+        'CustomUser',
         on_delete=models.PROTECT,
         blank=True,
         null=True
@@ -167,7 +158,7 @@ class Component(DefaultMixin):
 
     # Checkout Information
     user = models.ForeignKey(
-        'OrganizationUsers',
+        'CustomUser',
         on_delete=models.PROTECT,
         blank=True,
         null=True
@@ -225,7 +216,7 @@ class ConsumableLedger(DefaultMixin):
 
     # Checkout Information
     user = models.ForeignKey(
-        'OrganizationUsers',
+        'CustomUser',
         on_delete=models.PROTECT,
         blank=True,
         null=True
@@ -263,7 +254,7 @@ def update_deleted_quantity(sender, instance, **kwargs):
 
 class CheckoutLog(DefaultMixin):
     user = models.ForeignKey(
-        'OrganizationUsers',
+        'CustomUser',
         on_delete=models.PROTECT,
     )
     asset = models.ManyToManyField(Asset)
@@ -273,18 +264,18 @@ class CheckoutLog(DefaultMixin):
         return self.user.firstName
 
 # Purchasing
-# class PurchaseOrder(DefaultMixin):
-#     supplier = models.ForeignKey(
-#         'Supplier',
-#         on_delete=models.PROTECT
-#     )
-#     taxRate = models.DecimalField(max_digits=3, decimal_places=2)
-#     discount = models.IntegerField(default=0)
+class PurchaseOrder(DefaultMixin):
+    supplier = models.ForeignKey(
+        'Supplier',
+        on_delete=models.PROTECT
+    )
+    taxRate = models.DecimalField(max_digits=3, decimal_places=2, default=0)
+    discount = models.IntegerField(default=0)
 
-# class PurchaseOrderRow(DefaultMixin):
-#     purchaseOrder = models.ForeignKey(
-#         'PurchaseOrder',
-#         on_delete=models.PROTECT
-#     )
-#     price = models.IntegerField()
-#     quantity = models.IntegerField(default=1)
+class PurchaseOrderRow(DefaultMixin):
+    purchaseOrder = models.ForeignKey(
+        'PurchaseOrder',
+        on_delete=models.PROTECT
+    )
+    price = models.IntegerField()
+    quantity = models.IntegerField(default=1)

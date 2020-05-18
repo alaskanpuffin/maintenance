@@ -74,13 +74,13 @@ class ModelTable():
     url = 'model'
 
 class UserTable():
-    model = OrganizationUsers
+    model = CustomUser
     form = UserForm
-    fields = ('firstName', 'lastName', 'userId')
+    fields = ('username', 'first_name', 'last_name', 'userId')
     verbose_name = "User"
     verbose_plural_name = "Users"
     url = 'user'
-    search_fields = ('firstName', 'lastName')
+    search_fields = ('username', 'first_name', 'last_name')
 
 class SupplierTable():
     model = Supplier
@@ -88,3 +88,10 @@ class SupplierTable():
     verbose_name = "Supplier"
     verbose_plural_name = "Suppliers"
     url = 'supplier'
+
+class PurchaseOrderTable():
+    model = PurchaseOrder
+    form = PurchaseOrderForm
+    verbose_name = "Purchase Order"
+    verbose_plural_name = "Purchase Orders"
+    url = 'purchaseorder'

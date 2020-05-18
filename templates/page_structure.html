@@ -12,6 +12,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/adminlte.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datepicker3.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/toastr.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   <link href="{% static 'fonts/fontawesome/css/all.css' %}" rel="stylesheet">
   <script src="{% static 'js/adminlte.min.js' %}"></script>
@@ -19,6 +20,7 @@
   <script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
   <script src="{% static 'js/select2.full.min.js' %}"></script>
   <script src="{% static 'js/js.cookie.min.js' %}"></script>
+  <script src="{% static 'js/toastr.min.js' %}"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -85,6 +87,12 @@
                     <p>Batch Checkout</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="/assets/checkinform/" class="nav-link {% if request.path == '/assets/checkinform/' %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Batch Checkin</p>
+                  </a>
+                </li>
               </ul>
             </li>
             <li class="nav-item has-treeview {% if '/components/' in request.path %} menu-open {% endif %}">
@@ -130,7 +138,7 @@
                 </li>
               </ul>
             </li>
-            {% comment %} <li class="nav-item has-treeview {% if '/purchasing/' in request.path %} menu-open {% endif %}">
+            <li class="nav-item has-treeview {% if '/purchasing/' in request.path %} menu-open {% endif %}">
               <a href="/assets/" class="nav-link {% if 'purchasing/' in request.path %} active {% endif %}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
                 <p>
@@ -147,7 +155,7 @@
                   </a>
                 </li>
               </ul>
-            </li> {% endcomment %}
+            </li>
           </ul>
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item has-treeview {% if '/config/' in request.path %} menu-open {% endif %}">
@@ -222,6 +230,15 @@
   </div>
   <script>
     $('.datepicker').datepicker({});
+    {% if messages %}
+      {% for message in messages %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+          toastr.error('{{ message }}');
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+          toastr.success('{{ message }}');
+        {% endif %}
+      {% endfor %}
+    {% endif %}
   </script>
 </body>
 </html>
