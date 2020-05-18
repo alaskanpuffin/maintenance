@@ -25,6 +25,24 @@ class BootstrapFormMixin(forms.Form):
             self.fields[f].widget.attrs.update({'class': self.fields[f].widget.attrs.get('class', '') + ' is-invalid'})
         return ret
 
+
+class PurchaseOrderRowForm(ModelForm, BootstrapFormMixin):
+    class Meta:
+        model = PurchaseOrderRow
+        name = "Purchase Order Rows"
+        fields = '__all__'
+
+class PurchaseOrderForm(ModelForm, BootstrapFormMixin):
+    def __init__(self,*args,**kwargs):
+        super (PurchaseOrderForm,self ).__init__(*args,**kwargs)
+
+        self.fields['requiredBy'].widget.attrs['class'] = 'form-control datepicker'
+
+    class Meta:
+        model = PurchaseOrder
+        name = "Purchase Order"
+        fields = '__all__'
+
 class SiteForm(ModelForm, BootstrapFormMixin):
     class Meta:
         baseUrl = '/config/sites'
@@ -78,14 +96,20 @@ class UserForm(ModelForm, BootstrapFormMixin):
         return instance
 
     class Meta:
-        baseUrl = '/config/users'
         model = CustomUser
         name = "User"
         fields = ('username', 'first_name', 'last_name', 'email', 'userId', 'password')
 
-class SupplierForm(ModelForm, BootstrapFormMixin):
+class AddressForm(ModelForm, BootstrapFormMixin):
     class Meta:
-        baseUrl = '/config/supplier'
+        model = Address
+        name = "Address"
+        fields = '__all__'
+
+class SupplierForm(ModelForm, BootstrapFormMixin):
+    address = forms.ModelChoiceField(queryset=Address.objects.all(), widget=Select2(form=AddressForm), required=False)
+
+    class Meta:
         model = Supplier
         name = "Supplier"
         fields = '__all__'
@@ -96,6 +120,7 @@ class AssetForm(ModelForm, BootstrapFormMixin):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm), required=False)
     model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm), required=False)
+    purchaseOrder = forms.ModelChoiceField(queryset=PurchaseOrder.objects.all(), widget=Select2NoAdd(form=PurchaseOrderForm), required=False)
     supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
 
     def __init__(self,*args,**kwargs):
@@ -118,6 +143,7 @@ class ComponentForm(ModelForm, BootstrapFormMixin):
     model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm), required=False)
     asset = forms.ModelChoiceField(queryset=Asset.objects.all(), widget=Select2NoAdd(form=AssetForm), required=False)
+    purchaseOrder = forms.ModelChoiceField(queryset=PurchaseOrder.objects.all(), widget=Select2NoAdd(form=PurchaseOrderForm), required=False)
     supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
 
     def __init__(self,*args,**kwargs):
@@ -143,6 +169,8 @@ class ConsumableForm(ModelForm, BootstrapFormMixin):
 
 class ConsumableLedgerForm(ModelForm, BootstrapFormMixin):
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm), required=False)
+    purchaseOrder = forms.ModelChoiceField(queryset=PurchaseOrder.objects.all(), widget=Select2NoAdd(form=PurchaseOrderForm), required=False)
+    asset = forms.ModelChoiceField(queryset=Asset.objects.all(), widget=Select2NoAdd(form=AssetForm), required=False)
     consumable = forms.ModelChoiceField(queryset=Consumable.objects.all(), widget=Select2(form=ConsumableForm))
 
     class Meta:
@@ -170,10 +198,4 @@ class CheckinForm(ModelForm, BootstrapFormMixin):
         model = CheckoutLog
         name = "Batch Checkin"
         type = "checkin"
-        fields = '__all__'
-
-class PurchaseOrderForm(ModelForm, BootstrapFormMixin):
-    class Meta:
-        model = PurchaseOrder
-        name = "Purchase Order"
         fields = '__all__'

@@ -13,6 +13,7 @@ from django.db.models import Q
 import json
 from django.contrib import messages
 from django.db.models import ProtectedError
+from django.forms import inlineformset_factory
 
 
 class Dashboard(LoginRequiredMixin, TemplateView):
@@ -123,6 +124,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         self.tableObj = kwargs.get('tableObj')
         form = self.tableObj.form
+        #formset = inlineformset_factory(self.tableObj.model, self.tableObj.inline_model, fields=self.tableObj.inline_fields)
 
         if hasattr(form.Meta, 'customTemplate'):
             self.template = form.Meta.customTemplate
@@ -137,6 +139,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         self.tableObj = kwargs.get('tableObj')
         form = self.tableObj.form(request.POST)
+        #formset = inlineformset_factory(self.tableObj.model, self.tableObj.inline_model, fields=self.tableObj.inline_fields)
 
         if hasattr(form.Meta, 'customTemplate'):
             self.template = form.Meta.customTemplate
@@ -221,8 +224,11 @@ class ViewTable(LoginRequiredMixin, TemplateView):
                         objectDict['value'] = choice[1]
 
             if field.get_internal_type() == 'ForeignKey' and data:
-                objectDict['link'] = '%sview/%s/' % (
-                    reverse(field.name + ":main"), data.id)
+                try:
+                    objectDict['link'] = '%sview/%s/' % (
+                        reverse(field.name.lower() + ":main"), data.id)
+                except:
+                    pass
 
             object.append(objectDict)
 

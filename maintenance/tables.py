@@ -87,11 +87,31 @@ class SupplierTable():
     form = SupplierForm
     verbose_name = "Supplier"
     verbose_plural_name = "Suppliers"
+    fields = ('name',)
     url = 'supplier'
+
+class AddressTable():
+    model = Address
+    form = AddressForm
+    verbose_name = "Address"
+    verbose_plural_name = "Addresses"
+    url = 'address'
+
+class PurchaseOrderRowTable():
+    model = PurchaseOrderRow
+    form = PurchaseOrderRowForm
+    verbose_name = "Purchase Order Row"
+    verbose_plural_name = "Purchase Order Rows"
+    fields = ('name', 'purchaseOrder__purchaseOrderNumber','itemType', 'price', 'quantity', 'received')
+    search_fields = ('name', 'purchaseOrder__purchaseOrderNumber')
+    url = 'purchaseorderrow'
 
 class PurchaseOrderTable():
     model = PurchaseOrder
     form = PurchaseOrderForm
+    inline_model = PurchaseOrderRow
+    inline_fields = ('name', 'quantity')
     verbose_name = "Purchase Order"
     verbose_plural_name = "Purchase Orders"
+    fields = ('purchaseOrderNumber', 'supplier__name', 'shippingAddress__name', 'billingAddress__name', 'requiredBy')
     url = 'purchaseorder'

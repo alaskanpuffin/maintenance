@@ -13,6 +13,26 @@
     {% endfor %}
   </div>
 </div>
+
+<table class="table table-bordered">
+  <thead>                  
+    <tr>
+      {% for field in formset.0 %}
+        <th>{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>   
+    {% for form in formset %}
+    <tr>
+      {% for field in form %}
+        <td>{{ field }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
 <div class="card-footer">
   <button type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary">Submit</button>
 </div>

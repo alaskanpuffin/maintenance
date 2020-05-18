@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
+from localflavor.us.models import USStateField
 
 class DefaultMixin(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -36,8 +37,27 @@ class Manufacturer(DefaultMixin):
     def __str__(self):
         return self.name
 
+class Address(DefaultMixin):
+    name = models.CharField(max_length=300)
+    address = models.CharField(max_length=300)
+    city = models.CharField(max_length=100)
+    state = USStateField()
+    zipCode = models.CharField(max_length=100, verbose_name="Zip Code")
+    phone = models.CharField(max_length=100, blank=True, null=True)
+    fax = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    def __str__(self):
+        return self.name
+
 class Supplier(DefaultMixin):
     name = models.CharField(max_length=100)
+    address = models.ForeignKey(
+        'Address',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+
     def __str__(self):
         return self.name
 
@@ -90,6 +110,13 @@ class Asset(DefaultMixin):
         null=True
     )
     purchaseCost = models.IntegerField(blank=True, null=True, verbose_name="Purchase Cost")
+    purchaseOrder = models.ForeignKey(
+        'purchaseOrder',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name="Linked Purchase Order"
+    )
 
     # Lifetime Information
     warrantyExpiration = models.DateField(verbose_name="Warranty Expiration Date", blank=True, null=True)
@@ -151,6 +178,14 @@ class Component(DefaultMixin):
         null=True
     )
     purchaseCost = models.IntegerField(blank=True, null=True, verbose_name="Purchase Cost")
+    purchaseOrder = models.ForeignKey(
+        'purchaseOrder',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name="Linked Purchase Order"
+    )
+    
 
     # Lifetime Information
     warrantyExpiration = models.DateField(verbose_name="Warranty Expiration Date", blank=True, null=True)
@@ -211,8 +246,14 @@ class ConsumableLedger(DefaultMixin):
     quantity = models.IntegerField()
 
     # Purchasing Information
-    price = models.IntegerField(blank=True, null=True)
-    purchaseOrderId = models.CharField(max_length=100, blank=True, null=True)
+    price = models.FloatField(blank=True, null=True)
+    purchaseOrder = models.ForeignKey(
+        'purchaseOrder',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name="Linked Purchase Order"
+    )
 
     # Checkout Information
     user = models.ForeignKey(
@@ -265,17 +306,49 @@ class CheckoutLog(DefaultMixin):
 
 # Purchasing
 class PurchaseOrder(DefaultMixin):
+    purchaseOrderNumber = models.CharField(max_length=100, verbose_name="Purchase Order Number")
     supplier = models.ForeignKey(
         'Supplier',
         on_delete=models.PROTECT
     )
-    taxRate = models.DecimalField(max_digits=3, decimal_places=2, default=0)
+    note = models.CharField(max_length=1000, blank=True, null=True)
+    shippingAddress = models.ForeignKey(
+        'Address',
+        on_delete=models.PROTECT,
+        verbose_name="Shipping Address",
+        related_name="shippingAddress"
+    )
+    billingAddress = models.ForeignKey(
+        'Address',
+        on_delete=models.PROTECT,
+        verbose_name="Billing Address",
+        related_name="billingAddress"
+    )
+    requiredBy = models.DateField(verbose_name="Required By Date")
+    taxRate = models.DecimalField(max_digits=3, decimal_places=2, default=0, verbose_name="Tax Rate")
     discount = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.purchaseOrderNumber
 
 class PurchaseOrderRow(DefaultMixin):
     purchaseOrder = models.ForeignKey(
         'PurchaseOrder',
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        verbose_name="Purchase Order"
     )
-    price = models.IntegerField()
+
+    TYPE_CHOICES = [
+        ('asset', 'Asset'),
+        ('component', 'Component'),
+        ('consumables', 'Consumables'),
+        ('other', 'Other'),
+    ]
+    itemType = models.CharField(max_length=20, verbose_name="Type", choices=TYPE_CHOICES)
+    name = models.CharField(max_length=300)
+    price = models.FloatField()
     quantity = models.IntegerField(default=1)
+    received = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
