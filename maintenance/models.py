@@ -232,6 +232,10 @@ class Consumable(DefaultMixin):
         blank=True,
         null=True
     )
+    category = models.ForeignKey(
+        'Category',
+        on_delete=models.PROTECT,
+    )
     quantity = models.IntegerField(default=0)
     notes = models.CharField(max_length=1000, blank=True, null=True)
     location = models.CharField(max_length=500, blank=True, null=True)
