@@ -109,9 +109,16 @@ class PurchaseOrderRowTable():
 class PurchaseOrderTable():
     model = PurchaseOrder
     form = PurchaseOrderForm
-    inline_model = PurchaseOrderRow
-    inline_fields = ('name', 'quantity')
+    inline_models = [PurchaseOrderRowForm]
+    inline_fields = ('name', 'itemType', 'price', 'quantity', 'received')
     verbose_name = "Purchase Order"
     verbose_plural_name = "Purchase Orders"
     fields = ('purchaseOrderNumber', 'supplier__name', 'shippingAddress__name', 'billingAddress__name', 'requiredBy')
     url = 'purchaseorder'
+
+class WorkOrderTable():
+    model = WorkOrder
+    form = WorkOrderForm
+    verbose_name = "Work Order"
+    verbose_plural_name = "Work Orders"
+    url = 'workorder'

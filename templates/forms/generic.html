@@ -14,10 +14,37 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <div class="card">
-          {% include 'forms/form_generator.html' %}
-        </div>
-        <div class="card">
+        <div class="card card-primary card-outline card-outline-tabs">
+          {% if formsets %}
+          <div class="card-header p-0 border-bottom-0">
+            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="form-tabs" data-toggle="pill" href="#form-tabs-home" role="tab" aria-controls="form-tabs-home" aria-selected="false">Main</a>
+              </li>
+              {% for formset in formsets %}
+                <li class="nav-item">
+                  <a class="nav-link" id="form-tabs" data-toggle="pill" href="#form-tabs-home-{{ formset.name|slugify }}" role="tab" aria-controls="form-tabs-home-{{ formset.name|slugify }}" aria-selected="false">{{ formset.name }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+          <div class="card-body">
+            <div class="tab-content" id="custom-tabs-four-tabContent">
+              <div class="tab-pane fade show active" id="form-tabs-home" role="tabpanel" aria-labelledby="form-tabs">  
+                {% include 'forms/form_generator.html' %}
+              </div>
+              {% for formset in formsets %}
+                <div class="tab-pane fade" id="form-tabs-home-{{ formset.name|slugify }}" role="tabpanel" aria-labelledby="form-tabs">  
+                  {% include 'forms/formset_generator.html' with formset=formset %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          
+          <div class="card-footer">
+            <button type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary">Submit</button>
+          </div>
         </div>
       </div>
     </div>

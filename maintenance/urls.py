@@ -43,6 +43,7 @@ urlpatterns = [
     path('components/', include(tablepatterns, namespace='component'), {'tableObj': ComponentTable}),
     path('purchasing/purchaseorders/', include(tablepatterns, namespace='purchaseorder'), {'tableObj': PurchaseOrderTable}),
     path('purchasing/purchaseorderrows/', include(tablepatterns, namespace='purchaseorderrow'), {'tableObj': PurchaseOrderRowTable}),
+    path('maintenance/workorders/', include(tablepatterns, namespace='workorder'), {'tableObj': WorkOrderTable}),
     path('consumables/consumables/', include(tablepatterns, namespace='consumable'), {'tableObj': ConsumableTable}),
     path('consumables/consumableledger/', include(tablepatterns, namespace='consumableledger'), {'tableObj': ConsumableLedgerTable}),
     path('config/sites/', include(tablepatterns, namespace='site'), {'tableObj': SiteTable}),

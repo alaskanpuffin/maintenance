@@ -37,6 +37,11 @@ class Manufacturer(DefaultMixin):
     def __str__(self):
         return self.name
 
+class Accounts(DefaultMixin):
+    name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name
+
 class Address(DefaultMixin):
     name = models.CharField(max_length=300)
     address = models.CharField(max_length=300)
@@ -227,8 +232,13 @@ class Consumable(DefaultMixin):
         blank=True,
         null=True
     )
+    category = models.ForeignKey(
+        'Category',
+        on_delete=models.PROTECT,
+    )
     quantity = models.IntegerField(default=0)
     notes = models.CharField(max_length=1000, blank=True, null=True)
+    location = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.manufacturer.name + " " + self.name
@@ -254,6 +264,7 @@ class ConsumableLedger(DefaultMixin):
         null=True,
         verbose_name="Linked Purchase Order"
     )
+    externalPurchaseOrder = models.CharField(max_length=300, blank=True, null=True, verbose_name="External Purchase Order #")
 
     # Checkout Information
     user = models.ForeignKey(
@@ -352,3 +363,54 @@ class PurchaseOrderRow(DefaultMixin):
 
     def __str__(self):
         return self.name
+
+# Maintenance Work Orders
+class WorkOrder(DefaultMixin):
+    # General Information
+    date = models.DateField()
+    STATUS_CHOICES = [
+        ('requested', 'Requested'),
+        ('open', 'Open'),
+        ('onhold', 'On Hold'),
+        ('inrepair', 'In Repair'),
+        ('completed', 'Completed'),
+        ('canceled', 'Canceled'),
+    ]
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="requested")
+    PRIORITY_CHOICES = [
+        ('high', 'High'),
+        ('medium', 'Medium'),
+        ('low', 'Low'),
+    ]
+    priority = models.CharField(max_length=30, choices=PRIORITY_CHOICES, default="medium")
+    TYPE_CHOICES = [
+        ('repair', 'Repair'),
+        ('install', 'New Install'),
+        ('preventive', 'Preventive Maintenance'),
+        ('inspection', 'Inspection'),
+    ]
+    type = models.CharField(max_length=30, choices=TYPE_CHOICES, default="repair")
+    requiredByDate = models.DateField(verbose_name="Required By Date")
+
+    # Users
+    requestedBy = models.ForeignKey(
+        'CustomUser',
+        on_delete=models.PROTECT,
+        related_name="requestedBy",
+        verbose_name="Requested By"
+    )
+    assignedTo = models.ForeignKey(
+        'CustomUser',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        related_name="assignedTo",
+        verbose_name="Assigned To"
+    )
+
+    # WO Details
+    location = models.CharField(max_length=500, blank=True, null=True)
+    description = models.CharField(max_length=5000, blank=True, null=True)
+
+    def __str__(self):
+        return "WO%s" % (self.id,)

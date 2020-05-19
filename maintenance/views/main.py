@@ -121,11 +121,26 @@ class TableForm(LoginRequiredMixin, TemplateView):
     requestFormat = None
     template = 'forms/generic.html'
 
+    def generateFormset(self):
+        formsets = []
+        if hasattr(self.tableObj, 'inline_models'):
+            for inline_model in self.tableObj.inline_models:
+                formset = inlineformset_factory(self.tableObj.model, inline_model.Meta.model, fields=self.tableObj.inline_fields)
+
+                formsetDict = {
+                    'formset': formset,
+                    'name': inline_model.Meta.name,
+                    'model': inline_model.Meta.model
+                }
+                formsets.append(formsetDict)
+        return formsets
+
     def get(self, request, *args, **kwargs):
         self.tableObj = kwargs.get('tableObj')
         form = self.tableObj.form
-        #formset = inlineformset_factory(self.tableObj.model, self.tableObj.inline_model, fields=self.tableObj.inline_fields)
 
+        formsets = self.generateFormset()
+        
         if hasattr(form.Meta, 'customTemplate'):
             self.template = form.Meta.customTemplate
 
@@ -133,13 +148,15 @@ class TableForm(LoginRequiredMixin, TemplateView):
             objectId = kwargs.get('id')
             querySet = self.tableObj.model.objects.get(pk=objectId)
             form = form(instance=querySet)
+            formsets = self.generateFormset()
 
-        return render(request, self.template, {'form': form, 'tableObj': self.tableObj})
+        return render(request, self.template, {'form': form, 'formsets': formsets, 'tableObj': self.tableObj})
 
     def post(self, request, *args, **kwargs):
         self.tableObj = kwargs.get('tableObj')
         form = self.tableObj.form(request.POST)
-        #formset = inlineformset_factory(self.tableObj.model, self.tableObj.inline_model, fields=self.tableObj.inline_fields)
+
+        formsets = self.generateFormset()
 
         if hasattr(form.Meta, 'customTemplate'):
             self.template = form.Meta.customTemplate
@@ -172,7 +189,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
 
                 return HttpResponse(json.dumps(responseObj))
             else:
-                return render(request, self.template, {'form': form, 'tableObj': self.tableObj})
+                return render(request, self.template, {'form': form, 'formsets': formsets, 'tableObj': self.tableObj})
 
 
 class DeleteTable(LoginRequiredMixin, TemplateView):
