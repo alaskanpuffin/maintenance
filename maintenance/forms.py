@@ -84,12 +84,13 @@ class UserForm(ModelForm, BootstrapFormMixin):
 
     def save(self, commit=True):
         instance = super(UserForm, self).save(commit=False)
-        userObj = CustomUser.objects.get(pk=instance.id)
         if not self.cleaned_data['password'] == "":
             print(self.cleaned_data['password'])
             instance.password = make_password(self.cleaned_data['password'])
         else:
-            instance.password = userObj.password
+            if CustomUser.objects.filter(pk=instance.id).exists():
+                userObj = CustomUser.objects.get(pk=instance.id)
+                instance.password = userObj.password
 
         if commit:
             instance.save()
