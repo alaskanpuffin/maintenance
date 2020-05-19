@@ -130,6 +130,8 @@ class AssetForm(ModelForm, BootstrapFormMixin):
     purchaseOrder = forms.ModelChoiceField(queryset=PurchaseOrder.objects.all(), widget=Select2NoAdd(form=PurchaseOrderForm), required=False)
     supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
 
+    notes = forms.CharField( widget=forms.Textarea, required=False )
+
     def __init__(self,*args,**kwargs):
         super (AssetForm,self ).__init__(*args,**kwargs)
 
@@ -153,6 +155,8 @@ class ComponentForm(ModelForm, BootstrapFormMixin):
     purchaseOrder = forms.ModelChoiceField(queryset=PurchaseOrder.objects.all(), widget=Select2NoAdd(form=PurchaseOrderForm), required=False)
     supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
 
+    notes = forms.CharField( widget=forms.Textarea, required=False )
+
     def __init__(self,*args,**kwargs):
         super (ComponentForm,self ).__init__(*args,**kwargs)
 
@@ -163,6 +167,28 @@ class ComponentForm(ModelForm, BootstrapFormMixin):
         customTemplate = 'forms/component.html'
         model = Component
         name = "Component"
+        fields = '__all__'
+
+class LicenseForm(ModelForm, BootstrapFormMixin):
+    site = forms.ModelChoiceField(queryset=Site.objects.all(), widget=Select2(form=SiteForm))
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm))
+    user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm), required=False)
+    asset = forms.ModelChoiceField(queryset=Asset.objects.all(), widget=Select2NoAdd(form=AssetForm), required=False)
+    purchaseOrder = forms.ModelChoiceField(queryset=PurchaseOrder.objects.all(), widget=Select2NoAdd(form=PurchaseOrderForm), required=False)
+    supplier = forms.ModelChoiceField(queryset=Supplier.objects.all(), widget=Select2(form=SupplierForm), required=False)
+    manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), widget=Select2(form=ManufacturerForm))
+
+    notes = forms.CharField( widget=forms.Textarea, required=False )
+
+    def __init__(self,*args,**kwargs):
+        super (LicenseForm,self ).__init__(*args,**kwargs)
+
+        self.fields['expirationDate'].widget.attrs['class'] = 'form-control datepicker'
+
+    class Meta:
+        customTemplate = 'forms/license.html'
+        model = License
+        name = "License"
         fields = '__all__'
 
 class ConsumableForm(ModelForm, BootstrapFormMixin):

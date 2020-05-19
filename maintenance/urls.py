@@ -41,6 +41,7 @@ urlpatterns = [
     path('', Dashboard.as_view()),
     path('assets/', include(tablepatterns, namespace='asset'), {'tableObj': AssetTable}),
     path('components/', include(tablepatterns, namespace='component'), {'tableObj': ComponentTable}),
+    path('licenses/', include(tablepatterns, namespace='license'), {'tableObj': LicenseTable}),
     path('purchasing/purchaseorders/', include(tablepatterns, namespace='purchaseorder'), {'tableObj': PurchaseOrderTable}),
     path('purchasing/accounts/', include(tablepatterns, namespace='account'), {'tableObj': AccountTable}),
     path('purchasing/purchaseorderrows/', include(tablepatterns, namespace='purchaseorderrow'), {'tableObj': PurchaseOrderRowTable}),

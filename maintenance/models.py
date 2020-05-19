@@ -225,6 +225,67 @@ class Component(DefaultMixin):
     def __str__(self):
         return self.name + " - " + self.tag
 
+class License(DefaultMixin):
+    # General Information
+    name = models.CharField(max_length=100)
+    site = models.ForeignKey(
+        'Site',
+        on_delete=models.PROTECT,
+    )
+    key = models.CharField(max_length=100, blank=True, null=True, verbose_name="License Key")
+    manufacturer = models.ForeignKey(
+        'Manufacturer',
+        on_delete=models.PROTECT
+    )
+    department = models.ForeignKey(
+        'Department',
+        on_delete=models.PROTECT
+    )
+    location = models.CharField(max_length=500, blank=True, null=True)
+    expirationDate = models.DateField(blank=True, null=True)
+    notes = models.CharField(max_length=1000, blank=True, null=True)
+
+    STATUS_CHOICES = [
+        ('instore', 'In Store'),
+        ('inuse', 'In Use'),
+        ('discontinued', 'Discontinued'),
+    ]
+    status = models.CharField(max_length=30, choices=STATUS_CHOICES, default="instore")
+
+    # Purchasing Information
+    purchaseDate = models.DateField(verbose_name="Purchase Date", blank=True, null=True)
+    supplier = models.ForeignKey(
+        'Supplier',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+    purchaseCost = models.IntegerField(blank=True, null=True, verbose_name="Purchase Cost")
+    purchaseOrder = models.ForeignKey(
+        'purchaseOrder',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name="Linked Purchase Order"
+    )
+
+    # Checkout Information
+    user = models.ForeignKey(
+        'CustomUser',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+    asset = models.ForeignKey(
+        'Asset',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+
+    def __str__(self):
+        return self.name
+
 class Consumable(DefaultMixin):
     # General Information
     name = models.CharField(max_length=100)

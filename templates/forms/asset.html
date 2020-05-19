@@ -118,16 +118,16 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  {% with form.notes as field %}
-                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                  {% with form.warrantyExpiration as field %}
+                    <label for="{{ field.id_for_label }}">Warranty Expiration Date{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
                   {% endwith %}
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  {% with form.warrantyExpiration as field %}
-                    <label for="{{ field.id_for_label }}">Warranty Expiration Date{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                  {% with form.notes as field %}
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
                   {% endwith %}
                 </div>

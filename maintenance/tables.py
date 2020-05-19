@@ -10,6 +10,15 @@ class AssetTable():
     fields = ('name', 'tag', 'category__name', 'status', 'model__name')
     search_fields = ('name', 'tag')
 
+class LicenseTable():
+    model = License
+    form = LicenseForm
+    verbose_name = "License"
+    verbose_plural_name = "Licenses"
+    url = 'license'
+    fields = ('name', 'status', 'expirationDate', 'department__name')
+    search_fields = ('name', 'key')
+
 class ComponentTable():
     model = Component
     form = ComponentForm

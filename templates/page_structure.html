@@ -140,6 +140,24 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item has-treeview {% if '/licenses/' in request.path %} menu-open {% endif %}">
+              <a href="/licenses/" class="nav-link {% if 'licenses/' in request.path %} active {% endif %}">
+                <i class="nav-icon fas fa-key"></i>
+                <p>
+                  Licenses
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  {% url 'license:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>All Licenses</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
             <li class="nav-item has-treeview {% if '/maintenance/' in request.path %} menu-open {% endif %}">
               <a href="/maintenance/" class="nav-link {% if 'maintenance/' in request.path %} active {% endif %}">
                 <i class="nav-icon fas fa-tools"></i>

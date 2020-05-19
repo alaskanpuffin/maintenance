@@ -39,14 +39,6 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  {% with form.tag as field %}
-                    <label for="{{ field.id_for_label }}">Tag/Barcode{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
-                    {{ field }}
-                  {% endwith %}
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
                   {% with form.status as field %}
                     <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
@@ -55,7 +47,7 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  {% with form.model as field %}
+                  {% with form.manufacturer as field %}
                     <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
                   {% endwith %}
@@ -71,7 +63,7 @@
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  {% with form.category as field %}
+                  {% with form.key as field %}
                     <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
                   {% endwith %}
@@ -102,16 +94,8 @@
             <div class="row">
               <div class="col-6">
                 <div class="form-group">
-                  {% with form.serial as field %}
-                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
-                    {{ field }}
-                  {% endwith %}
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  {% with form.warrantyExpiration as field %}
-                    <label for="{{ field.id_for_label }}">Warranty Expiration Date{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                  {% with form.expirationDate as field %}
+                    <label for="{{ field.id_for_label }}">Expiration Date{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
                   {% endwith %}
                 </div>
@@ -188,14 +172,6 @@
                 <div class="form-group">
                   {% with form.user as field %}
                     <label for="{{ field.id_for_label }}">User{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
-                    {{ field }}
-                  {% endwith %}
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  {% with form.department as field %}
-                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
                   {% endwith %}
                 </div>
