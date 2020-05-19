@@ -336,6 +336,10 @@ class PurchaseOrder(DefaultMixin):
         related_name="billingAddress"
     )
     requiredBy = models.DateField(verbose_name="Required By Date")
+    account = models.ForeignKey(
+        'Account',
+        on_delete=models.PROTECT
+    )
     taxRate = models.DecimalField(max_digits=3, decimal_places=2, default=0, verbose_name="Tax Rate")
     discount = models.IntegerField(default=0)
 
