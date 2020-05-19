@@ -184,6 +184,7 @@ class LicenseForm(ModelForm, BootstrapFormMixin):
         super (LicenseForm,self ).__init__(*args,**kwargs)
 
         self.fields['expirationDate'].widget.attrs['class'] = 'form-control datepicker'
+        self.fields['purchaseDate'].widget.attrs['class'] = 'form-control datepicker'
 
     class Meta:
         customTemplate = 'forms/license.html'

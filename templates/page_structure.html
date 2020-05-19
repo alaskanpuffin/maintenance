@@ -55,7 +55,7 @@
 
       <div class="sidebar">
         <nav class="mt-2">
-          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <ul class="nav nav-pills nav-child-indent nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
               <a href="/" class="nav-link {% if request.path == '/' %} active {% endif %}">
                 <i class="fa fa-home nav-icon"></i>
@@ -208,8 +208,6 @@
                 </li>
               </ul>
             </li>
-          </ul>
-          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item has-treeview {% if '/config/' in request.path %} menu-open {% endif %}">
               <a href="/assets/" class="nav-link {% if '/config/' in request.path %} active {% endif %}">
                 <i class="nav-icon fas fa-cog"></i>
