@@ -50,6 +50,12 @@ class SiteForm(ModelForm, BootstrapFormMixin):
         name = "Site"
         fields = '__all__'
 
+class AccountForm(ModelForm, BootstrapFormMixin):
+    class Meta:
+        model = Account
+        name = "Account"
+        fields = '__all__'
+
 class CategoryForm(ModelForm, BootstrapFormMixin):
     class Meta:
         model = Category
@@ -162,6 +168,7 @@ class ComponentForm(ModelForm, BootstrapFormMixin):
 class ConsumableForm(ModelForm, BootstrapFormMixin):
     site = forms.ModelChoiceField(queryset=Site.objects.all(), widget=Select2(form=SiteForm))
     manufacturer = forms.ModelChoiceField(queryset=Manufacturer.objects.all(), widget=Select2(form=ManufacturerForm))
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=Select2(form=CategoryForm))
 
     class Meta:
         model = Consumable
@@ -199,4 +206,20 @@ class CheckinForm(ModelForm, BootstrapFormMixin):
         model = CheckoutLog
         name = "Batch Checkin"
         type = "checkin"
+        fields = '__all__'
+
+class WorkOrderForm(ModelForm, BootstrapFormMixin):
+    requestedBy = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2NoAdd(form=UserForm))
+    assignedTo = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2NoAdd(form=UserForm), required=False)
+    description = forms.CharField( widget=forms.Textarea, required=False )
+
+    def __init__(self,*args,**kwargs):
+        super (WorkOrderForm,self ).__init__(*args,**kwargs)
+
+        self.fields['requiredByDate'].widget.attrs['class'] = 'form-control datepicker'
+        self.fields['date'].widget.attrs['class'] = 'form-control datepicker'
+
+    class Meta:
+        model = WorkOrder
+        name = "Work Order"
         fields = '__all__'

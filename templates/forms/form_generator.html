@@ -1,7 +1,6 @@
 {% load verbose_names %}
 <form role="form" id="form-{{ form.Meta.name }}" method="POST" novalidate></form>
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" form="form-{{ form.Meta.name }}">
-<div class="card-body">
   <div class="row">
     {% for field in form %}
       <div class="col-6">
@@ -12,7 +11,6 @@
       </div>
     {% endfor %}
   </div>
-</div>
 
 <table class="table table-bordered">
   <thead>                  
@@ -32,7 +30,3 @@
     {% endfor %}
   </tbody>
 </table>
-
-<div class="card-footer">
-  <button type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary">Submit</button>
-</div>

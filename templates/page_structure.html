@@ -139,6 +139,24 @@
                 </li>
               </ul>
             </li>
+            <li class="nav-item has-treeview {% if '/maintenance/' in request.path %} menu-open {% endif %}">
+              <a href="/maintenance/" class="nav-link {% if 'maintenance/' in request.path %} active {% endif %}">
+                <i class="nav-icon fas fa-tools"></i>
+                <p>
+                  Maintenance
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  {% url 'workorder:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Work Orders</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
             <li class="nav-item has-treeview {% if '/purchasing/' in request.path %} menu-open {% endif %}">
               <a href="/assets/" class="nav-link {% if 'purchasing/' in request.path %} active {% endif %}">
                 <i class="nav-icon fas fa-file-invoice-dollar"></i>
@@ -160,6 +178,13 @@
                   <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Purchase Order Rows</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  {% url 'account:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Accounts</p>
                   </a>
                 </li>
               </ul>
