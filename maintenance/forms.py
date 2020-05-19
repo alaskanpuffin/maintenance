@@ -239,6 +239,7 @@ class WorkOrderForm(ModelForm, BootstrapFormMixin):
     requestedBy = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2NoAdd(form=UserForm))
     assignedTo = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2NoAdd(form=UserForm), required=False)
     description = forms.CharField( widget=forms.Textarea, required=False )
+    notes = forms.CharField( widget=forms.Textarea, required=False )
 
     def __init__(self,*args,**kwargs):
         super (WorkOrderForm,self ).__init__(*args,**kwargs)

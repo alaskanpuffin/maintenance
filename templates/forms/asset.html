@@ -40,7 +40,7 @@
               <div class="col-6">
                 <div class="form-group">
                   {% with form.tag as field %}
-                    <label for="{{ field.id_for_label }}">Tag/Barcode{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
                   {% endwith %}
                 </div>
@@ -56,7 +56,7 @@
               <div class="col-6">
                 <div class="form-group">
                   {% with form.model as field %}
-                    <label for="{{ field.id_for_label }}">{{ field.name|title }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
+                    <label for="{{ field.id_for_label }}">Model/Part Number{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</label>
                     {{ field }}
                   {% endwith %}
                 </div>

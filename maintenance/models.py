@@ -96,6 +96,7 @@ class Asset(DefaultMixin):
     model = models.ForeignKey(
         'Model',
         on_delete=models.PROTECT,
+        verbose_name="Model/Part Number"
     )
     serial = models.CharField(max_length=100, blank=True, null=True)
     location = models.CharField(max_length=500, blank=True, null=True)
@@ -482,6 +483,8 @@ class WorkOrder(DefaultMixin):
     # WO Details
     location = models.CharField(max_length=500, blank=True, null=True)
     description = models.CharField(max_length=4000, blank=True, null=True)
+
+    notes = models.CharField(max_length=1000, blank=True, null=True, verbose_name="Resolution Notes")
 
     def __str__(self):
         return "WO%s" % (self.id,)
