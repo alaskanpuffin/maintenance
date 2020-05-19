@@ -39,6 +39,7 @@ class Manufacturer(DefaultMixin):
 
 class Account(DefaultMixin):
     name = models.CharField(max_length=100)
+    accountNumber = models.CharField(max_length=100)
     def __str__(self):
         return self.name
 
@@ -83,6 +84,10 @@ class Asset(DefaultMixin):
     site = models.ForeignKey(
         'Site',
         on_delete=models.PROTECT,
+    )
+    department = models.ForeignKey(
+        'Department',
+        on_delete=models.PROTECT
     )
     category = models.ForeignKey(
         'Category',
@@ -134,11 +139,12 @@ class Asset(DefaultMixin):
         blank=True,
         null=True
     )
-    department = models.ForeignKey(
+    checkoutDepartment = models.ForeignKey(
         'Department',
         on_delete=models.PROTECT,
         blank=True,
-        null=True
+        null=True,
+        related_name="checkoutDepartment"
     )
 
     def __str__(self):

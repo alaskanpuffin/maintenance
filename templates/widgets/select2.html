@@ -17,7 +17,12 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-      {% include 'forms/form_generator.html' %}
+      <div class="card-body">
+        {% include 'forms/form_generator.html' %}
+      </div>
+      <div class="card-footer">
+        <button type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary">Submit</button>
+      </div>
     </div>
   </div
 </div>
