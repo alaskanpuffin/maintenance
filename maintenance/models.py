@@ -39,7 +39,7 @@ class Manufacturer(DefaultMixin):
 
 class Account(DefaultMixin):
     name = models.CharField(max_length=100)
-    accountNumber = models.CharField(max_length=100)
+    accountNumber = models.CharField(max_length=100, verbose_name="Account Number")
     def __str__(self):
         return self.name
 
