@@ -1,0 +1,19 @@
+{% load verbose_names %}
+<table class="table table-bordered">
+  <thead>                  
+    <tr>
+      {% for field in formset.formset.0 %}
+        <th>{% get_verbose_field_name formset.model field.name %}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>   
+    {% for form in formset.formset %}
+    <tr>
+      {% for field in form %}
+        <td>{{ field }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

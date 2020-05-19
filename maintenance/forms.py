@@ -50,6 +50,12 @@ class SiteForm(ModelForm, BootstrapFormMixin):
         name = "Site"
         fields = '__all__'
 
+class AccountForm(ModelForm, BootstrapFormMixin):
+    class Meta:
+        model = Account
+        name = "Account"
+        fields = '__all__'
+
 class CategoryForm(ModelForm, BootstrapFormMixin):
     class Meta:
         model = Category

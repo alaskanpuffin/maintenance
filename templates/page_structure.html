@@ -180,6 +180,13 @@
                     <p>Purchase Order Rows</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  {% url 'account:main' as viewUrl %}
+                  <a href="{{ viewUrl }}" class="nav-link {% if viewUrl in request.path %} active {% endif %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Accounts</p>
+                  </a>
+                </li>
               </ul>
             </li>
           </ul>

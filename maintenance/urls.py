@@ -51,6 +51,7 @@ urlpatterns = [
     path('config/departments/', include(tablepatterns, namespace='department'), {'tableObj': DepartmentTable}),
     path('config/manufacturers/', include(tablepatterns, namespace='manufacturer'), {'tableObj': ManufacturerTable}),
     path('config/models/', include(tablepatterns, namespace='model'), {'tableObj': ModelTable}),
+    path('config/accounts/', include(tablepatterns, namespace='account'), {'tableObj': AccountTable}),
     path('config/users/', include(tablepatterns, namespace='user'), {'tableObj': UserTable}),
     path('config/suppliers/', include(tablepatterns, namespace='supplier'), {'tableObj': SupplierTable}),
     path('config/addresses/', include(tablepatterns, namespace='address'), {'tableObj': AddressTable}),

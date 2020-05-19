@@ -19,6 +19,13 @@ class ComponentTable():
     fields = ('name', 'tag', 'category__name', 'status', 'model__name')
     search_fields = ('name', 'tag')
 
+class AccountTable():
+    model = Account
+    form = AccountForm
+    verbose_name = "Account"
+    verbose_plural_name = "Accounts"
+    url = 'account'
+
 class ConsumableTable():
     model = Consumable
     form = ConsumableForm
