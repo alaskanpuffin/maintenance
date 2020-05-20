@@ -137,4 +137,5 @@ class WorkOrderTable():
     form = WorkOrderForm
     verbose_name = "Work Order"
     verbose_plural_name = "Work Orders"
+    fields = ('date', 'status', 'priority', 'type', 'requiredByDate', 'location')
     url = 'workorder'
