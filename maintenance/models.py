@@ -439,6 +439,7 @@ class PurchaseOrderRow(DefaultMixin):
 # Maintenance Work Orders
 class WorkOrder(DefaultMixin):
     # General Information
+    workOrderNumber = models.CharField(max_length=100, verbose_name="Work Order Number")
     date = models.DateField()
     STATUS_CHOICES = [
         ('requested', 'Requested'),

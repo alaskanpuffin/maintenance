@@ -16,16 +16,17 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">{{ tableObj.verbose_name|title }} Details</h3>
+            <h3 class="card-title">{{ tableObj.verbose_name|title }}</h3>
           </div>
           {% block view %}{% endblock %}
-          <div class="card-footer">
+          <div class="card-footer d-print-none">
             <form method="POST" action="{% url tableObj.url|add:':delete' %}">
               {% csrf_token %}
               <input type="hidden" name="objects" value="{{ querySet.id }}">
               <button type="submit" class="btn btn-danger float-right ml-2" onclick="return confirm('Are you sure you want to delete this?')"><i class="fa fa-trash-alt"></i> Delete</button>
             </form>
             <a class="btn btn-success float-right" href="{% url tableObj.url|add:':edit' querySet.id %}"><i class="fa fa-edit"></i> Edit</a>
+            <a class="btn btn-default float-left" onclick="window.print();"><i class="fa fa-print"></i> Print</a>
           </div>
         </div>
       </div>
