@@ -191,7 +191,7 @@
     </div>
     <div class="row">
       <div class="col-12">
-        <button type="submit" form="form-{{ form.Meta.name }}" class="btn btn-primary float-right">Submit</button>
+        <button type="submit" form="form-{{ form.Meta.name|slugify }}" class="btn btn-primary float-right">Submit</button>
       </div>
     </div><br><br>
   </div>

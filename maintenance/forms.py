@@ -7,6 +7,8 @@ from .widgets import Select2, Select2NoAdd, Select2Multiple
 from django.db.models import Q
 from functools import reduce
 from django.contrib.auth.hashers import make_password
+from django.forms.models import BaseInlineFormSet
+from django.utils.text import slugify
 
 class BootstrapFormMixin(forms.Form):
     def __init__(self,*args,**kwargs):
@@ -17,7 +19,7 @@ class BootstrapFormMixin(forms.Form):
             self.fields[field].widget.attrs['autocomplete'] = 'off'
 
         for field in self.fields:
-            self.fields[field].widget.attrs['form'] = 'form-' + self.Meta.name
+            self.fields[field].widget.attrs['form'] = 'form-' + slugify(self.Meta.name)
 
     def is_valid(self):
         ret = forms.Form.is_valid(self)
@@ -251,3 +253,14 @@ class WorkOrderForm(ModelForm, BootstrapFormMixin):
         model = WorkOrder
         name = "Work Order"
         fields = '__all__'
+
+class GenericFormset(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.tableObj = kwargs.pop('tableObj')
+        super(GenericFormset, self).__init__(*args, **kwargs)
+
+        print(vars(self))
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs['form'] = 'form-' + slugify(self.tableObj.form.Meta.name)

@@ -121,12 +121,17 @@ class TableForm(LoginRequiredMixin, TemplateView):
     requestFormat = None
     template = 'forms/generic.html'
 
-    def generateFormset(self):
+    def generateFormset(self, request=None, querySet=None):
         formsets = []
         if hasattr(self.tableObj, 'inline_models'):
             for inline_model in self.tableObj.inline_models:
-                formset = inlineformset_factory(self.tableObj.model, inline_model.Meta.model, fields=self.tableObj.inline_fields)
-
+                formset = inlineformset_factory(self.tableObj.model, inline_model.Meta.model, fields=self.tableObj.inline_fields, form=GenericFormset)
+                if request == None:
+                    formset = formset(form_kwargs={'tableObj': self.tableObj})
+                    if not querySet == None:
+                        formset = formset(instance=querySet)
+                else:
+                    formset = formset(request.POST, form_kwargs={'tableObj': self.tableObj})
                 formsetDict = {
                     'formset': formset,
                     'name': inline_model.Meta.name,
@@ -148,7 +153,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
             objectId = kwargs.get('id')
             querySet = self.tableObj.model.objects.get(pk=objectId)
             form = form(instance=querySet)
-            formsets = self.generateFormset()
+            formsets = self.generateFormset(querySet=querySet)
 
         return render(request, self.template, {'form': form, 'formsets': formsets, 'tableObj': self.tableObj})
 
@@ -171,7 +176,18 @@ class TableForm(LoginRequiredMixin, TemplateView):
 
         responseObj = {}
 
-        if form.is_valid():
+        formInvalid = False
+
+        if not form.is_valid():
+            formInvalid = True
+        
+        postFormsets = self.generateFormset(request=request)
+
+        for formset in postFormsets:
+            if not formset['formset'].is_valid():
+                formInvalid = True
+        
+        if formInvalid == False:
             savedFormObj = form.save()
             responseObj['valid'] = True
             responseObj['pk'] = savedFormObj.pk
