@@ -127,11 +127,12 @@ class TableForm(LoginRequiredMixin, TemplateView):
             for inline_model in self.tableObj.inline_models:
                 formset = inlineformset_factory(self.tableObj.model, inline_model.Meta.model, fields=self.tableObj.inline_fields, form=GenericFormset)
                 if request == None:
-                    formset = formset(form_kwargs={'tableObj': self.tableObj})
                     if not querySet == None:
-                        formset = formset(instance=querySet)
+                        formset = formset(instance=querySet, form_kwargs={'tableObj': self.tableObj})
+                    else:
+                        formset = formset(form_kwargs={'tableObj': self.tableObj})
                 else:
-                    formset = formset(request.POST, form_kwargs={'tableObj': self.tableObj})
+                    formset = formset(request.POST, instance=querySet, form_kwargs={'tableObj': self.tableObj})
                 formsetDict = {
                     'formset': formset,
                     'name': inline_model.Meta.name,
@@ -160,6 +161,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         self.tableObj = kwargs.get('tableObj')
         form = self.tableObj.form(request.POST)
+        querySet = None
 
         formsets = self.generateFormset()
 
@@ -181,10 +183,11 @@ class TableForm(LoginRequiredMixin, TemplateView):
         if not form.is_valid():
             formInvalid = True
         
-        postFormsets = self.generateFormset(request=request)
+        formsets = self.generateFormset(request=request)
 
-        for formset in postFormsets:
+        for formset in formsets:
             if not formset['formset'].is_valid():
+                print(formset['formset'].errors)
                 formInvalid = True
         
         if formInvalid == False:
@@ -192,6 +195,15 @@ class TableForm(LoginRequiredMixin, TemplateView):
             responseObj['valid'] = True
             responseObj['pk'] = savedFormObj.pk
             responseObj['name'] = savedFormObj.__str__()
+
+            querySet = self.tableObj.model.objects.get(pk=responseObj['pk'])
+
+            postFormsets = self.generateFormset(querySet=querySet, request=request)
+
+            
+            for formset in postFormsets:
+                if formset['formset'].is_valid():
+                    formset['formset'].save()
 
             if self.requestFormat == 'json':
                 return HttpResponse(json.dumps(responseObj))

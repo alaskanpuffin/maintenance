@@ -93,7 +93,6 @@ class UserForm(ModelForm, BootstrapFormMixin):
     def save(self, commit=True):
         instance = super(UserForm, self).save(commit=False)
         if not self.cleaned_data['password'] == "":
-            print(self.cleaned_data['password'])
             instance.password = make_password(self.cleaned_data['password'])
         else:
             if CustomUser.objects.filter(pk=instance.id).exists():
@@ -258,8 +257,6 @@ class GenericFormset(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.tableObj = kwargs.pop('tableObj')
         super(GenericFormset, self).__init__(*args, **kwargs)
-
-        print(vars(self))
 
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'

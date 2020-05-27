@@ -417,7 +417,7 @@ class PurchaseOrder(DefaultMixin):
 class PurchaseOrderRow(DefaultMixin):
     purchaseOrder = models.ForeignKey(
         'PurchaseOrder',
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         verbose_name="Purchase Order"
     )
 

@@ -11,6 +11,7 @@
   </div>
 </div>
 <div class="content">
+<form role="form" id="form-{{ form.Meta.name|slugify }}" method="POST" novalidate>
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
@@ -49,4 +50,5 @@
       </div>
     </div>
   </div>
+</form>
 {% endblock %}

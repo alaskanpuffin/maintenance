@@ -1,5 +1,4 @@
 {% load verbose_names %}
-<form role="form" id="form-{{ form.Meta.name|slugify }}" method="POST" novalidate></form>
 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" form="form-{{ form.Meta.name|slugify }}">
   <div class="row">
     {% for field in form %}
