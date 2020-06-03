@@ -125,7 +125,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
         formsets = []
         if hasattr(self.tableObj, 'inline_models'):
             for inline_model in self.tableObj.inline_models:
-                formset = inlineformset_factory(self.tableObj.model, inline_model.Meta.model, fields=self.tableObj.inline_fields, form=GenericFormset)
+                formset = inlineformset_factory(self.tableObj.model, inline_model.Meta.model, fields=self.tableObj.inline_fields, form=GenericFormset, extra=1)
                 if request == None:
                     if not querySet == None:
                         formset = formset(instance=querySet, form_kwargs={'tableObj': self.tableObj})
@@ -168,10 +168,12 @@ class TableForm(LoginRequiredMixin, TemplateView):
         if hasattr(form.Meta, 'customTemplate'):
             self.template = form.Meta.customTemplate
 
+        formsets = self.generateFormset(request=request)
         if kwargs.get('id'):
             objectId = kwargs.get('id')
             querySet = self.tableObj.model.objects.get(pk=objectId)
             form = self.tableObj.form(request.POST, instance=querySet)
+            formsets = self.generateFormset(request=request, querySet=querySet)
 
         if request.GET.get('format'):
             self.requestFormat = request.GET.get('format')
@@ -182,8 +184,6 @@ class TableForm(LoginRequiredMixin, TemplateView):
 
         if not form.is_valid():
             formInvalid = True
-        
-        formsets = self.generateFormset(request=request)
 
         for formset in formsets:
             if not formset['formset'].is_valid():

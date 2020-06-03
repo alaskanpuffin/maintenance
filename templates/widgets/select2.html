@@ -21,7 +21,7 @@
         {% include 'forms/form_generator.html' %}
       </div>
       <div class="card-footer">
-        <button type="submit" form="form-{{ form.Meta.name|slugify }}" class="btn btn-primary">Submit</button>
+        <button type="submit" id="{{ form.Meta.name|slugify }}" class="btn btn-primary">Submit</button>
       </div>
     </div>
   </div

@@ -1,5 +1,5 @@
 {% load verbose_names %}
-{{ formset.formset.management_form }}
+<span class="add-row btn btn-success float-right mb-2"><i class="fa fa-plus"></i> Add Row</span>
 <table class="table table-bordered">
   <thead>                  
     <tr>
@@ -10,7 +10,7 @@
   </thead>
   <tbody>   
     {% for form in formset.formset %}
-    <tr>
+    <tr class="dynamic-form">
       {% for field in form %}
         <td>{{ field }}</td>
       {% endfor %}
@@ -18,3 +18,14 @@
     {% endfor %}
   </tbody>
 </table>
+{{ formset.formset.management_form }}
+  <script>
+  $(function () {
+        $('.add-row').click(function() {
+    	    return addForm(this, '{{ formset.formset.prefix }}');
+        });
+        $('.delete-row').click(function() {
+    	    return deleteForm(this, '{{ formset.formset.prefix }}');
+        })
+    })
+  </script>

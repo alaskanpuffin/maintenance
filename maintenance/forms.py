@@ -18,9 +18,6 @@ class BootstrapFormMixin(forms.Form):
             self.fields[field].widget.attrs['class'] = 'form-control'
             self.fields[field].widget.attrs['autocomplete'] = 'off'
 
-        for field in self.fields:
-            self.fields[field].widget.attrs['form'] = 'form-' + slugify(self.Meta.name)
-
     def is_valid(self):
         ret = forms.Form.is_valid(self)
         for f in self.errors:
