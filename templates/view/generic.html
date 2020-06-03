@@ -24,6 +24,28 @@
           {% endfor %}
         </tbody>
       </table>
+      {% for formset in formsets %}
+      {% if formset %}
+      <table class="table table-bordered">
+        <tr>
+          {% for field in formset.0 %}
+            {% if not field.name|hidden_fields %}
+              <th>{{ field.name|title }}</th>
+            {% endif %}
+          {% endfor %}
+        </tr>
+        {% for row in formset %}
+        <tr>
+            {% for field in row %}
+              {% if not field.name|hidden_fields %}
+                <td>{{ field.value }}</td>
+              {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+      {% endif %}
+      {% endfor %}
     </div>
   </div>
 {% endblock %}

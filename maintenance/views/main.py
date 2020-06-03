@@ -246,13 +246,8 @@ class DeleteTable(LoginRequiredMixin, TemplateView):
 
 class ViewTable(LoginRequiredMixin, TemplateView):
     tableObj = None
-
-    def get(self, request, *args, **kwargs):
-        self.tableObj = kwargs.get('tableObj')
-        objectId = kwargs['id']
-        objectQuerySet = self.tableObj.model.objects.get(pk=objectId)
-
-        fields = self.tableObj.model._meta.fields
+    def querySetToDict(self, model, objectQuerySet=None):
+        fields = model._meta.fields
 
         object = []
 
@@ -276,8 +271,24 @@ class ViewTable(LoginRequiredMixin, TemplateView):
                     pass
 
             object.append(objectDict)
+        
+        return object
 
-        return render(request, 'view/generic.html', {'object': object, 'querySet': objectQuerySet, 'tableObj': self.tableObj})
+    def get(self, request, *args, **kwargs):
+        self.tableObj = kwargs.get('tableObj')
+        objectId = kwargs['id']
+        objectQuerySet = self.tableObj.model.objects.get(pk=objectId)
+
+        formsets = []
+        for formset in self.tableObj.inline_models:
+            formsetQuerySet = formset.Meta.model.objects.filter(purchaseOrder=objectQuerySet)
+            formsetArray = []
+            for row in formsetQuerySet:
+                formsetArray.append(self.querySetToDict(formset.Meta.model, objectQuerySet=row))
+
+            formsets.append(formsetArray)
+
+        return render(request, 'view/generic.html', {'object': self.querySetToDict(self.tableObj.model, objectQuerySet=objectQuerySet), 'querySet': objectQuerySet, 'tableObj': self.tableObj, 'formsets': formsets})
 
 
 class Logout(TemplateView):

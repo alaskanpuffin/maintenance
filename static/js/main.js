@@ -35,3 +35,13 @@ function deleteForm(btn, prefix) {
             return false;
     }
 }
+
+function dictFromInputs(element) {
+    objectDict = {}
+    element.find('input, select, textarea').not(element.find('.card-body').find('input, select, textarea')).each(function( index ) {
+        name = $(this).attr('name');
+        value = $(this).val();
+        objectDict[name] = value;
+      });
+    return objectDict;
+}

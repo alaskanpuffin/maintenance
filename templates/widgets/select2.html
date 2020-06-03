@@ -17,7 +17,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-      <div class="card-body">
+      <div class="card-body" id="form-{{ form.Meta.name|slugify }}">
         {% include 'forms/form_generator.html' %}
       </div>
       <div class="card-footer">
@@ -29,12 +29,12 @@
 </div>
 <script>
   $('input[name="csrfmiddlewaretoken"]').val(Cookies.get('csrftoken'));
-  $("#form-{{ form.Meta.name }}").submit(function(e){
-      e.preventDefault();
+  $("#{{ form.Meta.name|slugify }}").click(function(e){
+      var id = $(this).attr("id");
       $.ajax({
-            type: $(this).attr('method'),
+            type: 'POST',
             url: '{% url widget.name|add:":add" %}?format=json',
-            data: $(this).serialize(),
+            data: dictFromInputs($('#form-' + id)),
             success: function (data) {
                 responseObj = $.parseJSON(data);
                 if (responseObj['valid'] == true) {
