@@ -10,11 +10,13 @@ distro==1.4.0
 Django==3.0.7
 django-filter==2.2.0
 django-localflavor==3.0.1
+django-mssql-backend==2.8.1
 djangorestframework==3.11.0
 gunicorn==20.0.4
 html5lib==1.0.1
 idna==2.8
 ipaddr==2.2.0
+lazy-object-proxy==1.4.3
 lockfile==0.12.2
 Markdown==3.2.1
 msgpack==0.6.2
@@ -22,6 +24,7 @@ mysqlclient==1.4.6
 packaging==20.3
 pep517==0.8.2
 progress==1.5
+pyodbc==4.0.30
 pyparsing==2.4.6
 python-stdnum==1.13
 pytoml==0.1.21
@@ -32,3 +35,4 @@ six==1.14.0
 sqlparse==0.3.1
 urllib3==1.25.8
 webencodings==0.5.1
+wrapt==1.12.1
