@@ -211,6 +211,7 @@ class TableForm(LoginRequiredMixin, TemplateView):
                 messages.success(request, "A record in %s has been successfully created." % self.tableObj.verbose_name)
                 return HttpResponseRedirect(reverse(self.tableObj.url + ':main'))
         else:
+            print(form.errors)
             if self.requestFormat == 'json':
                 responseObj['valid'] = False
                 responseObj['errors'] = form.errors
@@ -280,11 +281,12 @@ class ViewTable(LoginRequiredMixin, TemplateView):
         objectQuerySet = self.tableObj.model.objects.get(pk=objectId)
 
         formsets = []
-        for formset in self.tableObj.inline_models:
-            formsetQuerySet = formset.Meta.model.objects.filter(purchaseOrder=objectQuerySet)
-            formsetArray = []
-            for row in formsetQuerySet:
-                formsetArray.append(self.querySetToDict(formset.Meta.model, objectQuerySet=row))
+        if hasattr(self.tableObj, 'inline_models'):
+            for formset in self.tableObj.inline_models:
+                formsetQuerySet = formset.Meta.model.objects.filter(purchaseOrder=objectQuerySet)
+                formsetArray = []
+                for row in formsetQuerySet:
+                    formsetArray.append(self.querySetToDict(formset.Meta.model, objectQuerySet=row))
 
             formsets.append(formsetArray)
 

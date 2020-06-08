@@ -11,7 +11,8 @@
   </div>
 </div>
 <div class="content">
-<form role="form" id="form-{{ form.Meta.name|slugify }}" method="POST" novalidate>
+<form id="form-{{ form.Meta.name|slugify }}" method="POST" novalidate>
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
@@ -44,7 +45,7 @@
           </div>
           
           <div class="card-footer">
-            <button type="submit" form="form-{{ form.Meta.name|slugify }}" class="btn btn-primary">Submit</button>
+            <input type="submit" class="btn btn-primary" value="Submit">
           </div>
         </div>
       </div>

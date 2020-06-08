@@ -11,9 +11,8 @@
   </div>
 </div>
 
-<form role="form" id="form-{{ form.Meta.name }}" method="POST" novalidate></form>
-<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" form="form-{{ form.Meta.name }}">
-
+<form id="form-{{ form.Meta.name|slugify }}" method="POST" novalidate>
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 <div class="content">
   <div class="container-fluid">
     <div class="row">
@@ -219,4 +218,5 @@
       </div>
     </div><br><br>
   </div>
+</form>
 {% endblock %}

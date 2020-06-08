@@ -243,7 +243,7 @@ class License(DefaultMixin):
         on_delete=models.PROTECT
     )
     location = models.CharField(max_length=500, blank=True, null=True)
-    expirationDate = models.DateField(blank=True, null=True)
+    expirationDate = models.DateField(blank=True, null=True, verbose_name="Expiration Date")
     notes = models.CharField(max_length=1000, blank=True, null=True)
 
     STATUS_CHOICES = [
