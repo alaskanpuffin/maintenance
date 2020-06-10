@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Purchase Order {{ purchaseOrder.purchaseOrderNumber }}</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-6 mt-5">
+                    <h2>Purchase Order #{{ purchaseOrder.purchaseOrderNumber }}</h2>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-4">
+                    <p><b>Ship To</b></p>
+                    <p>
+                        {{ purchaseOrder.shippingAddress.name }}<br>
+                        {{ purchaseOrder.shippingAddress.address }}<br>
+                        {{ purchaseOrder.shippingAddress.city }}, {{ purchaseOrder.shippingAddress.state }} {{ purchaseOrder.shippingAddress.zipCode }}<br>
+                        {% if purchaseOrder.shippingAddress.phone %}
+                            Phone: {{ purchaseOrder.shippingAddress.phone }}<br>
+                        {% endif %}
+                        {% if purchaseOrder.shippingAddress.fax %}
+                            Fax: {{ purchaseOrder.shippingAddress.fax }}<br>
+                        {% endif %}
+                        {% if purchaseOrder.shippingAddress.email %}
+                            {{ purchaseOrder.shippingAddress.email }}<br>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-4">
+                    <p><b>Bill To</b></p>
+                    <p>
+                        {{ purchaseOrder.billingAddress.name }}<br>
+                        {{ purchaseOrder.billingAddress.address }}<br>
+                        {{ purchaseOrder.billingAddress.city }}, {{ purchaseOrder.billingAddress.state }} {{ purchaseOrder.billingAddress.zipCode }}<br>
+                        {% if purchaseOrder.billingAddress.phone %}
+                            Phone: {{ purchaseOrder.billingAddress.phone }}<br>
+                        {% endif %}
+                        {% if purchaseOrder.billingAddress.fax %}
+                            Fax: {{ purchaseOrder.billingAddress.fax }}<br>
+                        {% endif %}
+                        {% if purchaseOrder.billingAddress.email %}
+                            {{ purchaseOrder.billingAddress.email }}<br>
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-4">
+                    <p><b>Supplier</b></p>
+                    <p>
+                        {{ purchaseOrder.supplier.name }}<br>
+                        {{ purchaseOrder.supplier.address.address }}<br>
+                        {{ purchaseOrder.supplier.address.city }}, {{ purchaseOrder.supplier.address.state }} {{ purchaseOrder.supplier.address.zipCode }}<br>
+                        {% if purchaseOrder.supplier.address.phone %}
+                            Phone: {{ purchaseOrder.supplier.address.phone }}<br>
+                        {% endif %}
+                        {% if purchaseOrder.supplier.address.fax %}
+                            Fax: {{ purchaseOrder.supplier.address.fax }}<br>
+                        {% endif %}
+                        {% if purchaseOrder.supplier.address.email %}
+                            {{ purchaseOrder.supplier.address.email }}<br>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table mt-4">
+                        <thead>
+                          <tr>
+                            <th scope="col">Product</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in purchaseOrderRowObj %}
+                          <tr>
+                            <th scope="row">{{ row.name }}</th>
+                            <td>{{ row.price }}</td>
+                            <td>{{ row.quantity }}</td>
+                            <td>{{ row.total }}</td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12" style="text-align: right;">
+                    <p>Subtotal: {{ subtotal }}</p>
+                    <p>Tax: {{ tax }}</p>
+                    <p>Shipping: {{ shipping }}</p>
+                    <p>Discount: -{{ discount }}</p>
+                    <p>Total: {{ grandtotal }}</p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

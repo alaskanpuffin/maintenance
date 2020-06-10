@@ -410,6 +410,7 @@ class PurchaseOrder(DefaultMixin):
     )
     taxRate = models.DecimalField(max_digits=3, decimal_places=2, default=0, verbose_name="Tax Rate")
     discount = models.IntegerField(default=0)
+    shipping = models.IntegerField(default=0)
 
     def __str__(self):
         return self.purchaseOrderNumber

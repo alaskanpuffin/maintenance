@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from .views.main import Dashboard, Table, TableForm, DeleteTable, ViewTable, Logout, CheckoutFormView
+from .views.reports import PurchaseOrderReport
 from django.conf.urls.static import static
 from django.conf import settings
 from .tables import *
@@ -63,6 +64,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    path('reports/purchaseorder/<int:id>/', PurchaseOrderReport.as_view(), name="purchaseorderreport"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
