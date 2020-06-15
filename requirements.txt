@@ -20,7 +20,6 @@ lazy-object-proxy==1.4.3
 lockfile==0.12.2
 Markdown==3.2.1
 msgpack==0.6.2
-mysqlclient==1.4.6
 packaging==20.3
 pep517==0.8.2
 progress==1.5
