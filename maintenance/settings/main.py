@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'maintenance',
     'rest_framework',
     'localflavor',
+    'django_countries'
 ]
 
 MIDDLEWARE = [

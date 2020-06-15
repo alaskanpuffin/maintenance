@@ -126,6 +126,7 @@ class PurchaseOrderTable():
     model = PurchaseOrder
     form = PurchaseOrderForm
     inline_models = [PurchaseOrderRowForm]
+    download = 'purchaseorderreport'
     inline_fields = ('name', 'itemType', 'price', 'quantity', 'received')
     verbose_name = "Purchase Order"
     verbose_plural_name = "Purchase Orders"
