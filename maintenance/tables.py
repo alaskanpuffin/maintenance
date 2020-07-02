@@ -8,7 +8,7 @@ class AssetTable():
     verbose_plural_name = "Assets"
     url = 'asset'
     fields = ('name', 'tag', 'category__name', 'status', 'model__name')
-    search_fields = ('name', 'tag')
+    search_fields = ('name', 'tag', 'serial')
 
 class LicenseTable():
     model = License
