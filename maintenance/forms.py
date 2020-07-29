@@ -122,7 +122,7 @@ class SupplierForm(ModelForm, BootstrapFormMixin):
 class AssetForm(ModelForm, BootstrapFormMixin):
     site = forms.ModelChoiceField(queryset=Site.objects.all(), widget=Select2(form=SiteForm))
     category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=Select2(form=CategoryForm))
-    department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm), required=False)
+    department = forms.ModelChoiceField(queryset=Department.objects.all(), widget=Select2(form=DepartmentForm))
     model = forms.ModelChoiceField(queryset=Model.objects.all(), widget=Select2(form=ModelsForm))
     user = forms.ModelChoiceField(queryset=CustomUser.objects.all(), widget=Select2(form=UserForm), required=False)
     purchaseOrder = forms.ModelChoiceField(queryset=PurchaseOrder.objects.all(), widget=Select2NoAdd(form=PurchaseOrderForm), required=False)

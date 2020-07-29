@@ -21,7 +21,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-if os.environ['DJANGO_ENVIROMENT'] == "development":
+if os.environ['DJANGO_ENVIRONMENT'] == "development":
     DEBUG = True
 
 ALLOWED_HOSTS = ['*']
