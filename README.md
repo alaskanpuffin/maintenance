@@ -11,3 +11,5 @@ If `DB_ENGINE` is "mssql", the following environment variables are required.
 `DB_USERNAME` username of a database user with read/write permissions.
 `DB_PASSWORD` password for the above user.
 `DB_HOST` IP of the MSSQL server.
+
+Can also be ran using Docker, build an image with the included Dockerfile.
